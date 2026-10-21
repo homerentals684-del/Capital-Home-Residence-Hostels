@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { ksh, normalizeKePhone } from "@/lib/format";
+import { selectCls } from "@/lib/ui";
 
 export const Route = createFileRoute("/register")({
   head: () => ({
@@ -23,7 +24,6 @@ export const Route = createFileRoute("/register")({
   component: RegisterPage,
 });
 
-export const selectCls = "flex h-9 w-full rounded-md border border-input bg-background px-3 text-sm shadow-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring";
 const MAX_MB = 5;
 
 const schema = z.object({

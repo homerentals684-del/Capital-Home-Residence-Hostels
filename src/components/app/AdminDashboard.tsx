@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ksh } from "@/lib/format";
-import { selectCls } from "@/routes/register";
+import { selectCls } from "@/lib/ui";
 import { AppShell, Stat, useAvatarUrl } from "./AppShell";
 
 export function AdminDashboard() {
