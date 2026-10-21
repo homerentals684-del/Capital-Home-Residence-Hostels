@@ -1,22 +1,34 @@
 import { Link } from "@tanstack/react-router";
 import logo from "@/assets/logo.png.asset.json";
 import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
-export function SiteHeader() {
+export function SiteHeader({ signedIn = false }: { signedIn?: boolean }) {
   return (
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-3">
+        <Link to={signedIn ? "/home" : "/"} className="flex items-center gap-3">
           <img src={logo.url} alt="Capital Home Residence logo" className="h-14 w-auto" />
         </Link>
-        <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex">
-          <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-primary" }}>Home</Link>
-          <a href="/#rooms" className="hover:text-primary">Rooms</a>
-          <a href="/#contact" className="hover:text-primary">Contact</a>
-        </nav>
+        {signedIn && (
+          <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex">
+            <Link to="/home" activeProps={{ className: "text-primary" }}>Home</Link>
+            <a href="/home#rooms" className="hover:text-primary">Rooms</a>
+            <a href="/home#contact" className="hover:text-primary">Contact</a>
+          </nav>
+        )}
         <div className="flex items-center gap-2">
-          <Button asChild variant="ghost"><Link to="/login">Login</Link></Button>
-          <Button asChild><Link to="/register">Register</Link></Button>
+          {signedIn ? (
+            <>
+              <Button asChild variant="ghost"><Link to="/dashboard">Dashboard</Link></Button>
+              <Button variant="outline" onClick={async () => { await supabase.auth.signOut(); window.location.replace("/"); }}>Sign out</Button>
+            </>
+          ) : (
+            <>
+              <Button asChild variant="ghost"><Link to="/login">Login</Link></Button>
+              <Button asChild><Link to="/register">Register</Link></Button>
+            </>
+          )}
         </div>
       </div>
     </header>
