@@ -9,21 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
 import { Route as AuthenticatedPayRouteImport } from './routes/_authenticated/pay'
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
 import { Route as AuthenticatedReceiptIdRouteImport } from './routes/_authenticated/receipt.$id'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
@@ -41,6 +36,11 @@ const RegisterRoute = RegisterRouteImport.update({
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedPayRoute = AuthenticatedPayRouteImport.update({
@@ -66,20 +66,22 @@ const ApiPublicPaystackWebhookRoute =
   } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/home': typeof AuthenticatedHomeRoute
   '/pay': typeof AuthenticatedPayRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/home': typeof AuthenticatedHomeRoute
   '/pay': typeof AuthenticatedPayRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
@@ -87,11 +89,11 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/home': typeof AuthenticatedHomeRoute
   '/_authenticated/pay': typeof AuthenticatedPayRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
   '/_authenticated/receipt/$id': typeof AuthenticatedReceiptIdRoute
@@ -104,6 +106,7 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/dashboard'
+    | '/home'
     | '/pay'
     | '/payments'
     | '/receipt/$id'
@@ -114,17 +117,18 @@ export interface FileRouteTypes {
     | '/login'
     | '/register'
     | '/dashboard'
+    | '/home'
     | '/pay'
     | '/payments'
     | '/receipt/$id'
     | '/api/public/paystack-webhook'
   id:
     | '__root__'
-    | '/'
     | '/_authenticated'
     | '/login'
     | '/register'
     | '/_authenticated/dashboard'
+    | '/_authenticated/home'
     | '/_authenticated/pay'
     | '/_authenticated/payments'
     | '/_authenticated/receipt/$id'
@@ -132,7 +136,6 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
@@ -141,13 +144,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -174,6 +170,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/home': {
+      id: '/_authenticated/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/pay': {
@@ -209,6 +212,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
   AuthenticatedPayRoute: typeof AuthenticatedPayRoute
   AuthenticatedPaymentsRoute: typeof AuthenticatedPaymentsRoute
   AuthenticatedReceiptIdRoute: typeof AuthenticatedReceiptIdRoute
@@ -216,6 +220,7 @@ interface AuthenticatedRouteRouteChildren {
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedHomeRoute: AuthenticatedHomeRoute,
   AuthenticatedPayRoute: AuthenticatedPayRoute,
   AuthenticatedPaymentsRoute: AuthenticatedPaymentsRoute,
   AuthenticatedReceiptIdRoute: AuthenticatedReceiptIdRoute,
@@ -225,7 +230,6 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,

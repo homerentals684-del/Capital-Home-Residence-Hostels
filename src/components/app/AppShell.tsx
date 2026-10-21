@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { LogOut } from "lucide-react";
 import logo from "@/assets/logo.png.asset.json";
@@ -16,8 +16,10 @@ export function AppShell({ title, name, children }: { title: string; name?: stri
             <span className="hidden border-l pl-4 text-sm font-medium text-muted-foreground sm:block">{title}</span>
           </div>
           <div className="flex items-center gap-3">
+            <Button asChild variant="ghost" size="sm"><Link to="/home">Home</Link></Button>
+            <Button asChild variant="ghost" size="sm"><Link to="/dashboard">Dashboard</Link></Button>
             {name && <span className="hidden text-sm sm:block">{name}</span>}
-            <Button variant="outline" size="sm" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/login" }); }}>
+            <Button variant="outline" size="sm" onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/", replace: true }); }}>
               <LogOut />Sign out
             </Button>
           </div>

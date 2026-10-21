@@ -32,7 +32,7 @@ const blocks = [
 function Index() {
   return (
     <div className="min-h-screen">
-      <SiteHeader />
+      <SiteHeader signedIn />
       <section className="relative isolate overflow-hidden">
         <img src={building.url} alt="Capital Home Residence building" className="absolute inset-0 -z-20 h-full w-full object-cover object-[60%_30%]" />
         <div className="absolute inset-0 -z-10 bg-hero-overlay" />
