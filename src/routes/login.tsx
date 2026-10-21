@@ -1,11 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Mail, Lock } from "lucide-react";
+import { Mail, Lock, Loader2 } from "lucide-react";
 import building from "@/assets/building.png.asset.json";
 import logo from "@/assets/logo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -20,7 +21,22 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  const [msg, setMsg] = useState("");
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [busy, setBusy] = useState(false);
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault();
+    setBusy(true);
+    setError("");
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    setBusy(false);
+    if (error) return setError("Incorrect email or password.");
+    navigate({ to: "/dashboard" });
+  }
+
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="relative hidden lg:block">
@@ -32,10 +48,7 @@ function LoginPage() {
         </div>
       </div>
       <div className="flex items-center justify-center p-6">
-        <form
-          className="w-full max-w-sm space-y-6"
-          onSubmit={(e) => { e.preventDefault(); setMsg("Accounts are being set up — sign-in opens soon."); }}
-        >
+        <form className="w-full max-w-sm space-y-6" onSubmit={submit}>
           <Link to="/"><img src={logo.url} alt="Capital Home Residence" className="mx-auto h-24 w-auto" /></Link>
           <div className="text-center">
             <h1 className="text-4xl font-semibold">Sign in</h1>
@@ -43,14 +56,16 @@ function LoginPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <div className="relative"><Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><Input id="email" type="email" required className="pl-9" /></div>
+            <div className="relative"><Mail className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} className="pl-9" /></div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="pw">Password</Label>
-            <div className="relative"><Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><Input id="pw" type="password" required className="pl-9" /></div>
+            <div className="relative"><Lock className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" /><Input id="pw" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} className="pl-9" /></div>
           </div>
-          <Button type="submit" className="w-full" size="lg">Sign in</Button>
-          {msg && <p className="text-center text-sm text-muted-foreground">{msg}</p>}
+          {error && <p className="text-center text-sm text-destructive">{error}</p>}
+          <Button type="submit" className="w-full" size="lg" disabled={busy}>
+            {busy && <Loader2 className="animate-spin" />}Sign in
+          </Button>
           <p className="text-center text-sm text-muted-foreground">
             New tenant? <Link to="/register" className="font-medium text-primary underline">Register here</Link>
           </p>
