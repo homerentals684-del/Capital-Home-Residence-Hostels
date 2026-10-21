@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ShieldCheck, Smartphone, BedDouble, ArrowRight } from "lucide-react";
-import building from "@/assets/building.png.asset.json";
-import logo from "@/assets/logo.png.asset.json";
+import building from "@/assets/building.webp";
+import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 

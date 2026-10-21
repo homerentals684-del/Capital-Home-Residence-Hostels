@@ -1,8 +1,8 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { Mail, Lock, Loader2 } from "lucide-react";
-import building from "@/assets/building.png.asset.json";
-import logo from "@/assets/logo.png.asset.json";
+import building from "@/assets/building.webp";
+import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

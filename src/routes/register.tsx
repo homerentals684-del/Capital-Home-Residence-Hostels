@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState, type ReactNode } from "react";
 import { UserPlus, Upload, Info, Loader2, CheckCircle2 } from "lucide-react";
 import { z } from "zod";
-import building from "@/assets/building.png.asset.json";
+import building from "@/assets/building.webp";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

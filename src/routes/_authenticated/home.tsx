@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Home, GraduationCap, Smartphone, BedDouble, Users } from "lucide-react";
-import building from "@/assets/building.png.asset.json";
+import building from "@/assets/building.webp";
 import { Button } from "@/components/ui/button";
 import { SiteHeader, SiteFooter } from "@/components/site/SiteHeader";
 
