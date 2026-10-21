@@ -4,10 +4,10 @@ import building from "@/assets/building.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { SiteHeader, SiteFooter } from "@/components/site/SiteHeader";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({
     meta: [
-      { title: "Capital Home Residence Rentals — Student Rooms" },
+      { title: "Rooms & Residences — Capital Home Residence" },
       { name: "description", content: "Safe, comfortable student rooms. Register, pick your room and pay rent via M-Pesa." },
       { property: "og:title", content: "Capital Home Residence Rentals" },
       { property: "og:description", content: "Safe, comfortable student rooms with easy M-Pesa rent payments." },
@@ -45,8 +45,8 @@ function Index() {
             Register online, choose your room, and manage semester rent with secure M-Pesa payments — all in one place.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button asChild variant="gold" size="lg"><Link to="/register">Apply for a room</Link></Button>
-            <Button asChild variant="heroOutline" size="lg"><Link to="/login">Tenant login</Link></Button>
+            <Button asChild variant="gold" size="lg"><Link to="/dashboard">My dashboard</Link></Button>
+            <Button asChild variant="heroOutline" size="lg"><a href="#rooms">View rooms</a></Button>
           </div>
         </div>
       </section>
@@ -84,7 +84,7 @@ function Index() {
             <Users className="h-10 w-10 text-gold" />
             <p className="font-display text-3xl">Ready to secure your room this semester?</p>
           </div>
-          <Button asChild variant="gold" size="lg"><Link to="/register">Register now</Link></Button>
+          <Button asChild variant="gold" size="lg"><Link to="/dashboard">Go to my dashboard</Link></Button>
         </div>
       </section>
       <SiteFooter />
