@@ -10,6 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ksh } from "@/lib/format";
 import { selectCls } from "@/lib/ui";
 import { AppShell, Stat, useAvatarUrl } from "./AppShell";
+import { AdminPayments } from "./AdminPayments";
 
 export function AdminDashboard() {
   const { data: counts } = useQuery({
@@ -39,10 +40,12 @@ export function AdminDashboard() {
           <TabsTrigger value="registrations">Tenant Registrations</TabsTrigger>
           <TabsTrigger value="rooms">Rooms</TabsTrigger>
           <TabsTrigger value="semesters">Semesters</TabsTrigger>
+          <TabsTrigger value="payments">Payments</TabsTrigger>
         </TabsList>
         <TabsContent value="registrations"><Registrations /></TabsContent>
         <TabsContent value="rooms"><Rooms /></TabsContent>
         <TabsContent value="semesters"><Semesters /></TabsContent>
+        <TabsContent value="payments"><AdminPayments /></TabsContent>
       </Tabs>
     </AppShell>
   );
