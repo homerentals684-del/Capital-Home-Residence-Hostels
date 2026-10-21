@@ -44,6 +44,119 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_attempts: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          display_text: string | null
+          id: string
+          paystack_id: number | null
+          phone: string
+          provider_message: string | null
+          provider_status: string | null
+          reference: string
+          rent_charge_id: string
+          status: Database["public"]["Enums"]["attempt_status"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents: number
+          created_at?: string
+          display_text?: string | null
+          id?: string
+          paystack_id?: number | null
+          phone: string
+          provider_message?: string | null
+          provider_status?: string | null
+          reference: string
+          rent_charge_id: string
+          status?: Database["public"]["Enums"]["attempt_status"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          display_text?: string | null
+          id?: string
+          paystack_id?: number | null
+          phone?: string
+          provider_message?: string | null
+          provider_status?: string | null
+          reference?: string
+          rent_charge_id?: string
+          status?: Database["public"]["Enums"]["attempt_status"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_attempts_rent_charge_id_fkey"
+            columns: ["rent_charge_id"]
+            isOneToOne: false
+            referencedRelation: "rent_charges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payments: {
+        Row: {
+          amount_cents: number
+          attempt_id: string
+          balance_after_cents: number
+          created_at: string
+          id: string
+          method: string
+          paid_at: string
+          paystack_reference: string
+          receipt_number: string
+          rent_charge_id: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents: number
+          attempt_id: string
+          balance_after_cents: number
+          created_at?: string
+          id?: string
+          method?: string
+          paid_at?: string
+          paystack_reference: string
+          receipt_number?: string
+          rent_charge_id: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          attempt_id?: string
+          balance_after_cents?: number
+          created_at?: string
+          id?: string
+          method?: string
+          paid_at?: string
+          paystack_reference?: string
+          receipt_number?: string
+          rent_charge_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_attempt_id_fkey"
+            columns: ["attempt_id"]
+            isOneToOne: true
+            referencedRelation: "payment_attempts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payments_rent_charge_id_fkey"
+            columns: ["rent_charge_id"]
+            isOneToOne: false
+            referencedRelation: "rent_charges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_path: string | null
@@ -432,6 +545,16 @@ export type Database = {
         Args: { _note?: string; _reg_id: string; _room_id?: string }
         Returns: string
       }
+      finalize_payment: {
+        Args: {
+          _amount_cents: number
+          _currency: string
+          _paid_at: string
+          _paystack_id: number
+          _reference: string
+        }
+        Returns: string
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -446,6 +569,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "tenant"
+      attempt_status: "pending" | "success" | "failed" | "unmatched"
       charge_status: "unpaid" | "partially_paid" | "paid" | "overdue"
       registration_status: "pending" | "approved" | "rejected"
       room_status: "available" | "occupied" | "vacant" | "maintenance"
@@ -578,6 +702,7 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "tenant"],
+      attempt_status: ["pending", "success", "failed", "unmatched"],
       charge_status: ["unpaid", "partially_paid", "paid", "overdue"],
       registration_status: ["pending", "approved", "rejected"],
       room_status: ["available", "occupied", "vacant", "maintenance"],
