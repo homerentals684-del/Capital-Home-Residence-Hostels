@@ -4,6 +4,6 @@
 - [x] Registrations + profile photo uploads; admin approve/reject
 - [x] Rooms, residences, semesters management; rent charge on approval
 - [x] Tenant dashboard + registration status page
-- [ ] Paystack M-Pesa STK Push + webhook, payment history, receipts (needs PAYSTACK_SECRET_KEY)
+- [x] Paystack M-Pesa STK Push, webhook, payment history, receipts, admin payments tab (webhook URL must be set in Paystack after publishing)
 - [ ] Move-out / next-semester requests, notifications, reconciliation screen
 - [ ] Admin password change

@@ -15,3 +15,4 @@
 - Money is stored as integer cents (KES); format with ksh() in src/lib/format.ts.
 - Rent charges snapshot the room price at approval time; later price edits don't alter existing charges.
 - Profile photos live in the private `avatars` bucket under `<user_id>/`; display via signed URLs.
+- Paystack payments: attempts are separate from verified payments; only finalize_payment() (service role, after Paystack verify API) changes balances.
