@@ -30,7 +30,7 @@ function Landing() {
 
   return (
     <div className="relative isolate flex min-h-screen flex-col overflow-hidden">
-      <img src={building.url} alt="Capital Home Residence building" className="absolute inset-0 -z-20 h-full w-full object-cover object-[60%_30%]" />
+      <img src={building} alt="Capital Home Residence building" className="absolute inset-0 -z-20 h-full w-full object-cover object-[60%_30%]" />
       <div className="absolute inset-0 -z-10 bg-hero-overlay" />
       <main className="mx-auto grid w-full max-w-7xl flex-1 items-center gap-12 px-6 py-12 lg:grid-cols-[1.2fr_1fr]">
         <div className="text-primary-foreground">
@@ -46,7 +46,7 @@ function Landing() {
           </ul>
         </div>
         <div className="rounded-3xl border bg-card/95 p-8 shadow-elegant backdrop-blur md:p-10">
-          <img src={logo.url} alt="Capital Home Residence logo" className="mx-auto h-28 w-auto" />
+          <img src={logo} alt="Capital Home Residence logo" className="mx-auto h-28 w-auto" />
           {signedIn ? (
             <div className="mt-8 space-y-3">
               <p className="text-center text-muted-foreground">You're signed in.</p>

@@ -40,7 +40,7 @@ function LoginPage() {
   return (
     <div className="grid min-h-screen lg:grid-cols-2">
       <div className="relative hidden lg:block">
-        <img src={building.url} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        <img src={building} alt="" className="absolute inset-0 h-full w-full object-cover" />
         <div className="absolute inset-0 bg-hero-overlay" />
         <div className="relative flex h-full flex-col justify-end p-12 text-primary-foreground">
           <p className="font-display text-5xl">Welcome home.</p>
@@ -49,7 +49,7 @@ function LoginPage() {
       </div>
       <div className="flex items-center justify-center p-6">
         <form className="w-full max-w-sm space-y-6" onSubmit={submit}>
-          <Link to="/"><img src={logo.url} alt="Capital Home Residence" className="mx-auto h-24 w-auto" /></Link>
+          <Link to="/"><img src={logo} alt="Capital Home Residence" className="mx-auto h-24 w-auto" /></Link>
           <div className="text-center">
             <h1 className="text-4xl font-semibold">Sign in</h1>
             <p className="text-sm text-muted-foreground">Tenants and landlord use the same login.</p>

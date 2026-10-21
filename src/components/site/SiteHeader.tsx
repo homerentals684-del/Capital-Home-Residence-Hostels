@@ -8,7 +8,7 @@ export function SiteHeader({ signedIn = false }: { signedIn?: boolean }) {
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         <Link to={signedIn ? "/home" : "/"} className="flex items-center gap-3">
-          <img src={logo.url} alt="Capital Home Residence logo" className="h-14 w-auto" />
+          <img src={logo} alt="Capital Home Residence logo" className="h-14 w-auto" />
         </Link>
         {signedIn && (
           <nav className="hidden items-center gap-8 text-sm font-medium text-muted-foreground md:flex">

@@ -134,7 +134,7 @@ function RegisterPage() {
       <SiteHeader />
       <div className="mx-auto grid max-w-7xl gap-8 px-6 py-10 lg:grid-cols-[1fr_2fr]">
         <aside className="relative hidden overflow-hidden rounded-2xl lg:block">
-          <img src={building.url} alt="Capital Home Residence" className="absolute inset-0 h-full w-full object-cover" />
+          <img src={building} alt="Capital Home Residence" className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-hero-overlay" />
           <div className="relative p-8 text-primary-foreground">
             <h1 className="text-5xl font-semibold leading-tight">Find your home <span className="text-gold">away from home</span></h1>
