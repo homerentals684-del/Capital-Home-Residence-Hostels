@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Printer, ArrowLeft } from "lucide-react";
-import logo from "@/assets/logo.png.asset.json";
+import logo from "@/assets/logo.png";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { ksh } from "@/lib/format";
@@ -49,7 +49,7 @@ function Receipt() {
       </div>
       <div className="mx-auto max-w-2xl rounded-2xl border bg-card p-10 shadow-elegant print:border-0 print:shadow-none">
         <div className="flex items-center justify-between border-b pb-6">
-          <img src={logo.url} alt="Capital Home Residence" className="h-20 w-auto" />
+          <img src={logo} alt="Capital Home Residence" className="h-20 w-auto" />
           <div className="text-right"><p className="font-display text-3xl">Payment Receipt</p><p className="text-sm text-muted-foreground">Capital Home Residence Rentals</p></div>
         </div>
         <p className="mt-6 text-sm text-muted-foreground">Amount paid</p>

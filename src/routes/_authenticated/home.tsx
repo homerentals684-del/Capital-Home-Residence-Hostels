@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Home, GraduationCap, Smartphone, BedDouble, Users } from "lucide-react";
-import building from "@/assets/building.png.asset.json";
+import building from "@/assets/building.webp";
 import { Button } from "@/components/ui/button";
 import { SiteHeader, SiteFooter } from "@/components/site/SiteHeader";
 
@@ -34,7 +34,7 @@ function Index() {
     <div className="min-h-screen">
       <SiteHeader signedIn />
       <section className="relative isolate overflow-hidden">
-        <img src={building.url} alt="Capital Home Residence building" className="absolute inset-0 -z-20 h-full w-full object-cover object-[60%_30%]" />
+        <img src={building} alt="Capital Home Residence building" className="absolute inset-0 -z-20 h-full w-full object-cover object-[60%_30%]" />
         <div className="absolute inset-0 -z-10 bg-hero-overlay" />
         <div className="mx-auto max-w-7xl px-6 py-28 md:py-40">
           <p className="text-sm font-semibold uppercase tracking-[0.3em] text-gold">Capital Home Residence</p>

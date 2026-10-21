@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 import { LogOut } from "lucide-react";
-import logo from "@/assets/logo.png.asset.json";
+import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -12,7 +12,7 @@ export function AppShell({ title, name, children }: { title: string; name?: stri
       <header className="border-b bg-card">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <div className="flex items-center gap-4">
-            <img src={logo.url} alt="Capital Home Residence" className="h-11 w-auto" />
+            <img src={logo} alt="Capital Home Residence" className="h-11 w-auto" />
             <span className="hidden border-l pl-4 text-sm font-medium text-muted-foreground sm:block">{title}</span>
           </div>
           <div className="flex items-center gap-3">
