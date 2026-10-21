@@ -94,7 +94,7 @@ function RegisterPage() {
     e.preventDefault();
     const fd = Object.fromEntries(new FormData(e.currentTarget));
     const parsed = schema.safeParse(fd);
-    if (!parsed.success) return setError(parsed.error.issues[0].message);
+    if (!parsed.success) return setError(parsed.error.issues[0]?.message ?? "Check the form");
     if (!file) return setError("Please upload a profile picture.");
     if (overCapacity) return setError(`This room has space for ${spaceLeft} more person(s).`);
     const d = parsed.data;

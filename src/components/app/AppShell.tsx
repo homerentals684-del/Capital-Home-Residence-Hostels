@@ -5,7 +5,7 @@ import logo from "@/assets/logo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 
-export function AppShell({ title, name, children }: { title: string; name?: string; children: ReactNode }) {
+export function AppShell({ title, name, children }: { title: string; name?: string | undefined; children: ReactNode }) {
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-muted">

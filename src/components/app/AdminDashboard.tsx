@@ -74,14 +74,14 @@ function Registrations() {
 
   async function approve(id: string, roomId: string, note: string) {
     const { error } = await supabase.rpc("approve_registration", { _reg_id: id, _room_id: roomId, _note: note });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Tenant approved and rent charge created");
     refresh();
   }
   async function reject(id: string, note: string) {
-    if (!note.trim()) return toast.error("Add a rejection reason");
+    if (!note.trim()) { toast.error("Add a rejection reason"); return; }
     const { error } = await supabase.rpc("reject_registration", { _reg_id: id, _note: note });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Application rejected");
     refresh();
   }
@@ -152,9 +152,9 @@ function Rooms() {
   async function addRoom() {
     const price = Math.round(Number(form.price) * 100);
     const max = parseInt(form.max);
-    if (!form.residence_id || !form.room_number.trim() || !(price >= 0) || !(max >= 1)) return toast.error("Fill in all room fields");
+    if (!form.residence_id || !form.room_number.trim() || !(price >= 0) || !(max >= 1)) { toast.error("Fill in all room fields"); return; }
     const { error } = await supabase.from("rooms").insert({ residence_id: form.residence_id, room_number: form.room_number.trim(), room_type: form.room_type, semester_price_cents: price, max_occupancy: max });
-    if (error) return toast.error(error.message.includes("duplicate") ? "Room number already exists" : error.message);
+    if (error) { toast.error(error.message.includes("duplicate") ? "Room number already exists" : error.message); return; }
     toast.success("Room added");
     setForm({ ...form, room_number: "" });
     refresh();
@@ -162,13 +162,13 @@ function Rooms() {
   async function addResidence() {
     if (!newRes.trim()) return;
     const { error } = await supabase.from("residences").insert({ name: newRes.trim() });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     setNewRes("");
     refresh();
   }
   async function update(id: string, patch: Record<string, unknown>) {
     const { error } = await supabase.from("rooms").update({ ...patch, updated_at: new Date().toISOString() }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     refresh();
   }
 
@@ -223,16 +223,16 @@ function Semesters() {
   });
   const [f, setF] = useState({ academic_year: "", name: "", start_date: "", end_date: "", rent_due_date: "" });
   async function add() {
-    if (Object.values(f).some((v) => !v)) return toast.error("Fill in all semester fields");
-    if (f.end_date <= f.start_date) return toast.error("End date must be after start date");
+    if (Object.values(f).some((v) => !v)) { toast.error("Fill in all semester fields"); return; }
+    if (f.end_date <= f.start_date) { toast.error("End date must be after start date"); return; }
     const { error } = await supabase.from("semesters").insert({ ...f, status: "upcoming" });
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     toast.success("Semester added");
     qc.invalidateQueries({ queryKey: ["admin-semesters"] });
   }
   async function setStatus(id: string, status: string) {
     const { error } = await supabase.from("semesters").update({ status }).eq("id", id);
-    if (error) return toast.error(error.message);
+    if (error) { toast.error(error.message); return; }
     qc.invalidateQueries({ queryKey: ["admin-semesters"] });
   }
   return (
