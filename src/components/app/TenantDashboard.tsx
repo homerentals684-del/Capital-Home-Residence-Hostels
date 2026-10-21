@@ -68,8 +68,11 @@ export function TenantDashboard({ userId }: { userId: string }) {
         </div>
         <div className="rounded-xl border bg-card p-6">
           <p className="flex items-center gap-2 font-semibold"><Smartphone className="h-4 w-4 text-gold" />Pay rent via M-Pesa</p>
-          <p className="mt-2 text-sm text-muted-foreground">Online M-Pesa payments are being connected and will be available here soon.</p>
-          <Button className="mt-4" disabled>Pay rent</Button>
+          <p className="mt-2 text-sm text-muted-foreground">Pay the full balance or in installments. Your balance updates once M-Pesa confirms.</p>
+          <div className="mt-4 flex gap-2">
+            <Button asChild variant="gold"><Link to="/pay">Pay rent</Link></Button>
+            <Button asChild variant="outline"><Link to="/payments">Payments & receipts</Link></Button>
+          </div>
         </div>
       </div>
     </AppShell>
