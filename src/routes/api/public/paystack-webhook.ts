@@ -1,10 +1,10 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { reconcileReference, verifySignature } from "@/lib/paystack.server";
 
 export const Route = createFileRoute("/api/public/paystack-webhook")({
   server: {
     handlers: {
       POST: async ({ request }) => {
+        const { reconcileReference, verifySignature } = await import("@/lib/paystack.server");
         const raw = await request.text();
         const ok = await verifySignature(raw, request.headers.get("x-paystack-signature")).catch(() => false);
         if (!ok) return new Response("Invalid signature", { status: 401 });
