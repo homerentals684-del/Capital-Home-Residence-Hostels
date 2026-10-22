@@ -1,5 +1,4 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Download, RefreshCw } from "lucide-react";
@@ -8,13 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ksh } from "@/lib/format";
-import { adminReconcile } from "@/lib/payments.functions";
+import { adminReconcile } from "@/lib/payments-client";
 
 const statuses = ["all", "pending", "success", "failed", "unmatched"] as const;
 
 export function AdminPayments() {
   const qc = useQueryClient();
-  const reconcile = useServerFn(adminReconcile);
+  const reconcile = adminReconcile;
   const [status, setStatus] = useState<(typeof statuses)[number]>("all");
   const [q, setQ] = useState("");
   const { data } = useQuery({

@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { Loader2, Smartphone, CheckCircle2, XCircle, ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AppShell } from "@/components/app/AppShell";
 import { ksh } from "@/lib/format";
-import { startMpesaPayment, checkPaymentStatus } from "@/lib/payments.functions";
+import { startMpesaPayment, checkPaymentStatus } from "@/lib/payments-client";
 
 export const Route = createFileRoute("/_authenticated/pay")({
   head: () => ({
@@ -26,8 +25,8 @@ export const Route = createFileRoute("/_authenticated/pay")({
 function PayPage() {
   const { user } = Route.useRouteContext();
   const qc = useQueryClient();
-  const start = useServerFn(startMpesaPayment);
-  const check = useServerFn(checkPaymentStatus);
+  const start = startMpesaPayment;
+  const check = checkPaymentStatus;
   const { data, isLoading } = useQuery({
     queryKey: ["pay-info", user.id],
     queryFn: async () => {
@@ -76,7 +75,7 @@ function PayPage() {
     setError(""); setResult(null);
     if (mode === "partial" && (payCents <= 0 || payCents >= outstanding)) return setError("Enter an amount above zero and below your balance.");
     setBusy(true);
-    const r = await start({ data: { chargeId: c.id, mode, amountKsh: mode === "partial" ? payCents / 100 : undefined, phone } }).catch(() => ({ ok: false as const, error: "Payment service unavailable." }));
+    const r = await start({ data: { chargeId: c.id, mode, amountKsh: mode === "partial" ? payCents / 100 : undefined, phone } }).catch((e: unknown) => ({ ok: false as const, error: e instanceof Error ? e.message : "Payment connection unavailable. Please try again shortly." }));
     setBusy(false);
     if (!r.ok) return setError(r.error);
     if (r.status === "success") { setResult("success"); qc.invalidateQueries(); return; }
