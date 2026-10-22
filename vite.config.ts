@@ -5,8 +5,13 @@
 //     React/TanStack dedupe, error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... }, etc... }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { PAYMENT_ORIGINS } from "./src/lib/payment-contract";
 
 export default defineConfig({
+  vite: {
+    // Vite handles OPTIONS before server routes during preview development.
+    server: { cors: { origin: [...PAYMENT_ORIGINS] } },
+  },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
