@@ -8,6 +8,8 @@ import { TenantDashboard, RegistrationStatus } from "@/components/app/TenantDash
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Dashboard — Capital Home Residence" },
       { name: "description", content: "Your Capital Home Residence account." },
       { property: "og:title", content: "Dashboard — Capital Home Residence" },

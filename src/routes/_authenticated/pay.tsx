@@ -13,6 +13,8 @@ import { startMpesaPayment, checkPaymentStatus } from "@/lib/payments-client";
 export const Route = createFileRoute("/_authenticated/pay")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Pay Rent — Capital Home Residence" },
       { name: "description", content: "Pay your semester rent via M-Pesa." },
       { property: "og:title", content: "Pay Rent — Capital Home Residence" },

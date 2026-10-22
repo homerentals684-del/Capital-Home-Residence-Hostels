@@ -9,6 +9,8 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Capital Home Residence Rentals — Welcome" },
       { name: "description", content: "Register or sign in to view rooms, apply and pay rent via M-Pesa at Capital Home Residence." },
       { property: "og:title", content: "Capital Home Residence Rentals" },
