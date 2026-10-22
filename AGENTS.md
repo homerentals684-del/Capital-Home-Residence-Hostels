@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 # Project rules
+- Images (logo, building photo) are bundled project files imported via Vite (`src/assets/logo.png`, `src/assets/building.webp`), never `.asset.json` CDN pointers — external deployments (GitHub → Vercel) can't serve Lovable's `/__l5e/` asset paths.
 - Roles live in public.user_roles checked via has_role(); never trust client role checks — admin gating is enforced by RLS.
 - Registration approval/rejection runs in security-definer SQL functions (approve_registration / reject_registration) so capacity checks, tenancy creation and rent charges happen atomically.
 - Money is stored as integer cents (KES); format with ksh() in src/lib/format.ts.
