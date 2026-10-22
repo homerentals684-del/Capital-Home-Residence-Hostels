@@ -18,6 +18,7 @@ import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/h
 import { Route as AuthenticatedPayRouteImport } from './routes/_authenticated/pay'
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
 import { Route as AuthenticatedReceiptIdRouteImport } from './routes/_authenticated/receipt.$id'
+import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
 
 const IndexRoute = IndexRouteImport.update({
@@ -64,6 +65,11 @@ const AuthenticatedReceiptIdRoute = AuthenticatedReceiptIdRouteImport.update({
   path: '/receipt/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
+  id: '/api/public/payments',
+  path: '/api/public/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicPaystackWebhookRoute =
   ApiPublicPaystackWebhookRouteImport.update({
     id: '/api/public/paystack-webhook',
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/pay': typeof AuthenticatedPayRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesByTo {
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/pay': typeof AuthenticatedPayRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRoutesById {
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/_authenticated/pay': typeof AuthenticatedPayRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
   '/_authenticated/receipt/$id': typeof AuthenticatedReceiptIdRoute
+  '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
 }
 export interface FileRouteTypes {
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/payments'
     | '/receipt/$id'
+    | '/api/public/payments'
     | '/api/public/paystack-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/pay'
     | '/payments'
     | '/receipt/$id'
+    | '/api/public/payments'
     | '/api/public/paystack-webhook'
   id:
     | '__root__'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/_authenticated/pay'
     | '/_authenticated/payments'
     | '/_authenticated/receipt/$id'
+    | '/api/public/payments'
     | '/api/public/paystack-webhook'
   fileRoutesById: FileRoutesById
 }
@@ -148,6 +160,7 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
 }
 
@@ -216,6 +229,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedReceiptIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/payments': {
+      id: '/api/public/payments'
+      path: '/api/public/payments'
+      fullPath: '/api/public/payments'
+      preLoaderRoute: typeof ApiPublicPaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/paystack-webhook': {
       id: '/api/public/paystack-webhook'
       path: '/api/public/paystack-webhook'
@@ -250,6 +270,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
 }
 export const routeTree = rootRouteImport

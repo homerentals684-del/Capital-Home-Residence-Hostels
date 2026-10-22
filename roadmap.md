@@ -5,5 +5,7 @@
 - [x] Rooms, residences, semesters management; rent charge on approval
 - [x] Tenant dashboard + registration status page
 - [x] Paystack M-Pesa STK Push, webhook, payment history, receipts, admin payments tab (webhook URL must be set in Paystack after publishing)
+- [x] Implement shared authenticated Lovable payment service for Vercel start, polling and admin re-check; security/request tests pass
+- [ ] Publish Lovable update, redeploy GitHub-to-Vercel, then verify an approved tenant's live payment on both hosts (blocked by deployment and tenant session/phone approval)
 - [ ] Move-out / next-semester requests, notifications, reconciliation screen
 - [ ] Admin password change

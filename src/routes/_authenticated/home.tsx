@@ -7,6 +7,8 @@ import { SiteHeader, SiteFooter } from "@/components/site/SiteHeader";
 export const Route = createFileRoute("/_authenticated/home")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Rooms & Residences — Capital Home Residence" },
       { name: "description", content: "Safe, comfortable student rooms. Register, pick your room and pay rent via M-Pesa." },
       { property: "og:title", content: "Capital Home Residence Rentals" },

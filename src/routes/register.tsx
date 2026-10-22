@@ -15,6 +15,8 @@ import { selectCls } from "@/lib/ui";
 export const Route = createFileRoute("/register")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Tenant Registration — Capital Home Residence" },
       { name: "description", content: "Apply for a room at Capital Home Residence Rentals." },
       { property: "og:title", content: "Tenant Registration — Capital Home Residence" },

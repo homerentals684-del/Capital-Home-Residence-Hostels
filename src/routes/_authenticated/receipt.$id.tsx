@@ -9,6 +9,8 @@ import { ksh } from "@/lib/format";
 export const Route = createFileRoute("/_authenticated/receipt/$id")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Receipt — Capital Home Residence" },
       { name: "description", content: "Rent payment receipt." },
       { property: "og:title", content: "Receipt — Capital Home Residence" },

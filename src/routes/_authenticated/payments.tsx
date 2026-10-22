@@ -9,6 +9,8 @@ import { ksh } from "@/lib/format";
 export const Route = createFileRoute("/_authenticated/payments")({
   head: () => ({
     meta: [
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       { title: "Payment History — Capital Home Residence" },
       { name: "description", content: "Your rent payments and receipts." },
       { property: "og:title", content: "Payment History — Capital Home Residence" },
