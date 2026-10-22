@@ -1,4 +1,3 @@
-// @vitest-environment node
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => ({
@@ -41,7 +40,8 @@ describe("authenticated cross-host payments", () => {
   });
   it("rejects a session the backend cannot verify", async () => {
     mocks.getUser.mockResolvedValue({ data: { user: null }, error: { message: "invalid" } });
-    expect((await handlePaymentRequest(request({ action: "check", data: { reference: "CHR-123" } })))).status).toBe(401);
+    const response = await handlePaymentRequest(request({ action: "check", data: { reference: "CHR-123" } }));
+    expect(response.status).toBe(401);
     expect(mocks.check).not.toHaveBeenCalled();
   });
   it("passes validated Vercel STK details and verified identity to the same payment logic", async () => {
@@ -61,6 +61,7 @@ describe("authenticated cross-host payments", () => {
   });
   it("preserves the admin permission check", async () => {
     mocks.reconcile.mockRejectedValue(new Error("Forbidden"));
-    expect((await handlePaymentRequest(request({ action: "reconcile", data: { reference: "CHR-123" } })))).status).toBe(403);
+    const response = await handlePaymentRequest(request({ action: "reconcile", data: { reference: "CHR-123" } }));
+    expect(response.status).toBe(403);
   });
 });
