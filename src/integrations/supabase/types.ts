@@ -545,6 +545,10 @@ export type Database = {
         Args: { _note?: string; _reg_id: string; _room_id?: string }
         Returns: string
       }
+      end_tenancy: {
+        Args: { _note?: string; _tenancy_id: string }
+        Returns: undefined
+      }
       finalize_payment: {
         Args: {
           _amount_cents: number

@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { AppShell } from "@/components/app/AppShell";
+import { tenantNav } from "@/components/app/TenantDashboard";
 import { ksh } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/payments")({
@@ -32,7 +33,7 @@ function Payments() {
     },
   });
   return (
-    <AppShell title="Payment History">
+    <AppShell title="Payment History" nav={tenantNav} active="payments">
       <Link to="/dashboard" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="h-4 w-4" />Back to dashboard</Link>
       <h1 className="mb-4 text-4xl font-semibold">Payment history</h1>
       <div className="overflow-x-auto rounded-xl border bg-card">
