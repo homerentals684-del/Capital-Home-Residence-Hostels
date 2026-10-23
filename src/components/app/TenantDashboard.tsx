@@ -1,11 +1,17 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { Clock, XCircle, ShieldAlert, Smartphone } from "lucide-react";
+import { Clock, XCircle, ShieldAlert, Smartphone, LayoutDashboard, Wallet, Receipt } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ksh } from "@/lib/format";
-import { AppShell, Stat, useAvatarUrl } from "./AppShell";
+import { AppShell, Stat, useAvatarUrl, type NavItem } from "./AppShell";
+
+const tenantNav: NavItem[] = [
+  { key: "overview", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
+  { key: "pay", label: "Pay Rent", icon: Wallet, section: "Finance", to: "/pay" },
+  { key: "payments", label: "Payments & Receipts", icon: Receipt, section: "Finance", to: "/payments" },
+];
 
 function useProfile(userId: string) {
   const sign = useAvatarUrl();
@@ -34,7 +40,7 @@ export function TenantDashboard({ userId }: { userId: string }) {
   const charge = data?.charges.at(-1);
   const t = data?.t;
   return (
-    <AppShell title="Tenant Dashboard" name={profile?.full_name}>
+    <AppShell title="Tenant Dashboard" name={profile?.full_name} nav={tenantNav} active="overview">
       <div className="flex flex-wrap items-center gap-5 rounded-2xl bg-gradient-navy p-6 text-primary-foreground shadow-elegant">
         <div className="h-20 w-20 overflow-hidden rounded-full border-2 border-gold bg-secondary">
           {profile?.avatarUrl && <img src={profile.avatarUrl} alt="" className="h-full w-full object-cover" />}
@@ -93,7 +99,7 @@ export function RegistrationStatus({ userId }: { userId: string }) {
   if (isLoading) return null;
   const Icon = !reg ? ShieldAlert : reg.status === "rejected" ? XCircle : reg.status === "approved" ? ShieldAlert : Clock;
   return (
-    <AppShell title="Registration Status" name={profile?.full_name}>
+    <AppShell title="Registration Status" name={profile?.full_name} nav={tenantNav} active="overview">
       <div className="mx-auto max-w-xl rounded-2xl border bg-card p-8 text-center shadow-elegant">
         <Icon className="mx-auto h-12 w-12 text-gold" />
         {!reg ? (
