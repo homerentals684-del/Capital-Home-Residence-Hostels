@@ -15,6 +15,13 @@
       "when": 1792580219578,
       "tag": "0001_payments",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792727317835,
+      "tag": "0002_end_tenancy_function",
+      "breakpoints": true
     }
   ]
 }
