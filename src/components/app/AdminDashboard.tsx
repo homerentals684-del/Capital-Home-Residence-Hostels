@@ -1,16 +1,24 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Check, X, Plus } from "lucide-react";
+import { Check, X, Plus, LayoutDashboard, UserPlus, Users, BedDouble, CalendarDays, Wallet, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ksh } from "@/lib/format";
 import { selectCls } from "@/lib/ui";
-import { AppShell, Stat, useAvatarUrl } from "./AppShell";
+import { AppShell, Stat, useAvatarUrl, type NavItem } from "./AppShell";
 import { AdminPayments } from "./AdminPayments";
+
+const adminNav: NavItem[] = [
+  { key: "overview", label: "Dashboard", icon: LayoutDashboard },
+  { key: "registrations", label: "Registrations", icon: UserPlus, section: "Tenant Management" },
+  { key: "tenants", label: "Active Tenants", icon: Users, section: "Tenant Management" },
+  { key: "rooms", label: "Rooms", icon: BedDouble, section: "Property Management" },
+  { key: "semesters", label: "Semesters", icon: CalendarDays, section: "Property Management" },
+  { key: "payments", label: "Payments", icon: Wallet, section: "Finance" },
+];
 
 export function AdminDashboard() {
   const { data: counts } = useQuery({
