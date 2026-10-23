@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Download, RefreshCw, ChevronDown, ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -88,8 +88,8 @@ export function AdminPayments({ limit }: { limit?: number }) {
               const last = g.attempts[0];
               const isOpen = open[g.userId] ?? false;
               return (
-                <>
-                  <tr key={g.userId} className="cursor-pointer border-t hover:bg-muted/50" onClick={() => setOpen({ ...open, [g.userId]: !isOpen })}>
+                <Fragment key={g.userId}>
+                  <tr className="cursor-pointer border-t hover:bg-muted/50" onClick={() => setOpen({ ...open, [g.userId]: !isOpen })}>
                     <td className="p-3">
                       <span className="flex items-center gap-2 font-medium">
                         {isOpen ? <ChevronDown className="h-4 w-4 text-muted-foreground" /> : <ChevronRight className="h-4 w-4 text-muted-foreground" />}
@@ -117,7 +117,7 @@ export function AdminPayments({ limit }: { limit?: number }) {
                       </tr>
                     );
                   })}
-                </>
+                </Fragment>
               );
             })}
           </tbody>
