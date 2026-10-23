@@ -34,28 +34,107 @@ export function AdminDashboard() {
       return { pending: p.count ?? 0, tenants: t.count ?? 0, rooms: r.data?.length ?? 0, available: (r.data ?? []).filter((x) => x.status === "available").length, outstanding };
     },
   });
+  const [section, setSection] = useState("overview");
+  const headings: Record<string, string> = {
+    overview: "Overview", registrations: "Tenant Registrations", tenants: "Active Tenants",
+    rooms: "Rooms", semesters: "Semesters", payments: "Payments",
+  };
   return (
-    <AppShell title="Admin Dashboard" name="Administrator">
-      <h1 className="text-4xl font-semibold">Overview</h1>
-      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Pending registrations" value={counts?.pending ?? "–"} tone="gold" />
-        <Stat label="Active tenants" value={counts?.tenants ?? "–"} />
-        <Stat label="Rooms available" value={counts ? `${counts.available} / ${counts.rooms}` : "–"} />
-        <Stat label="Outstanding rent" value={counts ? ksh(counts.outstanding) : "–"} />
-      </div>
-      <Tabs defaultValue="registrations" className="mt-8">
-        <TabsList>
-          <TabsTrigger value="registrations">Tenant Registrations</TabsTrigger>
-          <TabsTrigger value="rooms">Rooms</TabsTrigger>
-          <TabsTrigger value="semesters">Semesters</TabsTrigger>
-          <TabsTrigger value="payments">Payments</TabsTrigger>
-        </TabsList>
-        <TabsContent value="registrations"><Registrations /></TabsContent>
-        <TabsContent value="rooms"><Rooms /></TabsContent>
-        <TabsContent value="semesters"><Semesters /></TabsContent>
-        <TabsContent value="payments"><AdminPayments /></TabsContent>
-      </Tabs>
+    <AppShell title="Admin Dashboard" name="Administrator" nav={adminNav} active={section} onNavigate={setSection}>
+      <h1 className="text-4xl font-semibold">{headings[section]}</h1>
+      {section === "overview" && (
+        <>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <Stat label="Pending registrations" value={counts?.pending ?? "–"} tone="gold" />
+            <Stat label="Active tenants" value={counts?.tenants ?? "–"} />
+            <Stat label="Rooms available" value={counts ? `${counts.available} / ${counts.rooms}` : "–"} />
+            <Stat label="Outstanding rent" value={counts ? ksh(counts.outstanding) : "–"} />
+          </div>
+          <div className="mt-8"><AdminPayments limit={8} /></div>
+        </>
+      )}
+      {section === "registrations" && <div className="mt-6"><Registrations /></div>}
+      {section === "tenants" && <div className="mt-6"><Tenants /></div>}
+      {section === "rooms" && <div className="mt-6"><Rooms /></div>}
+      {section === "semesters" && <div className="mt-6"><Semesters /></div>}
+      {section === "payments" && <div className="mt-6"><AdminPayments /></div>}
     </AppShell>
+  );
+}
+
+function Tenants() {
+  const qc = useQueryClient();
+  const sign = useAvatarUrl();
+  const [q, setQ] = useState("");
+  const { data } = useQuery({
+    queryKey: ["admin-tenants"],
+    queryFn: async () => {
+      const { data: ts } = await supabase.from("tenancies")
+        .select("id, user_id, occupants, status, started_at, ended_at, rooms(room_number, room_type, residences(name)), semesters(academic_year, name), rent_charges(amount_cents, paid_cents, status, due_date)")
+        .order("started_at", { ascending: false });
+      const ids = [...new Set((ts ?? []).map((t) => t.user_id))];
+      const { data: profs } = ids.length ? await supabase.from("profiles").select("*").in("id", ids) : { data: [] };
+      return Promise.all((ts ?? []).map(async (t) => {
+        const p = profs?.find((x) => x.id === t.user_id);
+        const charges = t.rent_charges ?? [];
+        return {
+          ...t, profile: p, avatar: await sign(p?.avatar_path ?? null),
+          totalCents: charges.reduce((s, c) => s + c.amount_cents, 0),
+          paidCents: charges.reduce((s, c) => s + c.paid_cents, 0),
+        };
+      }));
+    },
+  });
+  const rows = (data ?? []).filter((t) =>
+    !q || `${t.profile?.full_name} ${t.profile?.email} ${t.rooms?.room_number} ${t.rooms?.residences?.name}`.toLowerCase().includes(q.toLowerCase()));
+
+  async function remove(t: { id: string; profile?: { full_name?: string } | null }) {
+    if (!window.confirm(`Remove ${t.profile?.full_name ?? "this tenant"}? Their tenancy ends and the room is freed. Payment records are kept.`)) return;
+    const { error } = await supabase.rpc("end_tenancy", { _tenancy_id: t.id });
+    if (error) { toast.error(error.message); return; }
+    toast.success("Tenancy ended and room freed");
+    qc.invalidateQueries({ queryKey: ["admin-tenants"] });
+    qc.invalidateQueries({ queryKey: ["admin-counts"] });
+    qc.invalidateQueries({ queryKey: ["admin-rooms"] });
+  }
+
+  return (
+    <div className="space-y-4">
+      <Input className="w-full sm:w-72" placeholder="Search tenant, room, hostel" value={q} onChange={(e) => setQ(e.target.value)} />
+      <div className="overflow-x-auto rounded-xl border bg-card">
+        <table className="w-full text-sm">
+          <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
+            <tr><th className="p-3">Tenant</th><th>Hostel</th><th>Room</th><th>Semester</th><th>Total rent</th><th>Paid</th><th>Outstanding</th><th>Status</th><th></th></tr>
+          </thead>
+          <tbody>
+            {rows.length === 0 && <tr><td colSpan={9} className="p-8 text-center text-muted-foreground">No tenants found.</td></tr>}
+            {rows.map((t) => (
+              <tr key={t.id} className="border-t">
+                <td className="p-3">
+                  <div className="flex items-center gap-3">
+                    <div className="h-9 w-9 shrink-0 overflow-hidden rounded-full bg-secondary">
+                      {t.avatar && <img src={t.avatar} alt="" className="h-full w-full object-cover" />}
+                    </div>
+                    <div>
+                      <p className="font-medium">{t.profile?.full_name}</p>
+                      <p className="text-xs text-muted-foreground">{t.profile?.phone}</p>
+                    </div>
+                  </div>
+                </td>
+                <td>{t.rooms?.residences?.name}</td>
+                <td>{t.rooms?.room_number} <span className="text-xs text-muted-foreground">({t.occupants} pax)</span></td>
+                <td className="whitespace-nowrap">{t.semesters?.academic_year} {t.semesters?.name}</td>
+                <td className="font-medium">{ksh(t.totalCents)}</td>
+                <td className="text-leaf">{ksh(t.paidCents)}</td>
+                <td className="font-medium text-gold">{ksh(t.totalCents - t.paidCents)}</td>
+                <td><Badge variant={t.status === "active" ? "default" : "secondary"} className="capitalize">{t.status}</Badge></td>
+                <td>{t.status === "active" && <Button size="sm" variant="ghost" className="text-destructive" onClick={() => remove(t)}><Trash2 />Remove</Button>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 }
 
