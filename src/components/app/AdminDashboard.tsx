@@ -88,7 +88,7 @@ function Tenants() {
   const rows = (data ?? []).filter((t) =>
     !q || `${t.profile?.full_name} ${t.profile?.email} ${t.rooms?.room_number} ${t.rooms?.residences?.name}`.toLowerCase().includes(q.toLowerCase()));
 
-  async function remove(t: { id: string; profile?: { full_name?: string } | null }) {
+  async function remove(t: { id: string; profile?: { full_name?: string } | null | undefined }) {
     if (!window.confirm(`Remove ${t.profile?.full_name ?? "this tenant"}? Their tenancy ends and the room is freed. Payment records are kept.`)) return;
     const { error } = await supabase.rpc("end_tenancy", { _tenancy_id: t.id });
     if (error) { toast.error(error.message); return; }

@@ -46,7 +46,7 @@ export function AdminPayments({ limit }: { limit?: number }) {
       g.attempts.push(r);
       if (!g.room && r.rent_charges?.rooms?.room_number) g.room = r.rent_charges.rooms.room_number;
     }
-    const all = [...map.values()].sort((a, b) => b.attempts[0].created_at.localeCompare(a.attempts[0].created_at));
+    const all = [...map.values()].sort((a, b) => (b.attempts[0]?.created_at ?? "").localeCompare(a.attempts[0]?.created_at ?? ""));
     return limit ? all.slice(0, limit) : all;
   }, [rows, limit]);
 
@@ -85,7 +85,8 @@ export function AdminPayments({ limit }: { limit?: number }) {
             {groups.length === 0 && <tr><td colSpan={7} className="p-8 text-center text-muted-foreground">No transactions.</td></tr>}
             {groups.map((g) => {
               const paid = g.attempts.filter((a) => a.status === "success").reduce((s, a) => s + a.amount_cents, 0);
-              const last = g.attempts[0];
+              const last = g.attempts[0]!;
+              if (!last) return null;
               const isOpen = open[g.userId] ?? false;
               return (
                 <Fragment key={g.userId}>
