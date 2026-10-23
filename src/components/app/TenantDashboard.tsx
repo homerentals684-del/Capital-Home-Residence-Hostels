@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { ksh } from "@/lib/format";
 import { AppShell, Stat, useAvatarUrl, type NavItem } from "./AppShell";
 
-const tenantNav: NavItem[] = [
+export const tenantNav: NavItem[] = [
   { key: "overview", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
   { key: "pay", label: "Pay Rent", icon: Wallet, section: "Finance", to: "/pay" },
   { key: "payments", label: "Payments & Receipts", icon: Receipt, section: "Finance", to: "/payments" },

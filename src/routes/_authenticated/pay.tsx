@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AppShell } from "@/components/app/AppShell";
+import { tenantNav } from "@/components/app/TenantDashboard";
 import { ksh } from "@/lib/format";
 import { startMpesaPayment, checkPaymentStatus } from "@/lib/payments-client";
 
@@ -85,7 +86,7 @@ function PayPage() {
   }
 
   return (
-    <AppShell title="Pay Rent" name={data?.p?.full_name}>
+    <AppShell title="Pay Rent" name={data?.p?.full_name} nav={tenantNav} active="pay">
       <Link to="/dashboard" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary"><ArrowLeft className="h-4 w-4" />Back to dashboard</Link>
       {!c ? (
         <p className="rounded-xl border bg-card p-8 text-center text-muted-foreground">You have no rent charge to pay.</p>
