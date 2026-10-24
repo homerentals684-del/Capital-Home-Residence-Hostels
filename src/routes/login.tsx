@@ -36,7 +36,7 @@ function LoginPage() {
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setBusy(false);
     if (error) return setError("Incorrect email or password.");
-    navigate({ to: "/home" });
+    navigate({ to: "/dashboard", replace: true });
   }
 
   return (

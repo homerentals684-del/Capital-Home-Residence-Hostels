@@ -52,8 +52,7 @@ function Landing() {
           {signedIn ? (
             <div className="mt-8 space-y-3">
               <p className="text-center text-muted-foreground">You're signed in.</p>
-              <Button asChild size="lg" variant="gold" className="w-full"><Link to="/home">Continue to homepage <ArrowRight /></Link></Button>
-              <Button asChild size="lg" variant="outline" className="w-full"><Link to="/dashboard">My dashboard</Link></Button>
+              <Button asChild size="lg" variant="gold" className="w-full"><Link to="/dashboard">Continue to dashboard <ArrowRight /></Link></Button>
             </div>
           ) : (
             <div className="mt-8 space-y-4">

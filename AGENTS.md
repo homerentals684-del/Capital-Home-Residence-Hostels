@@ -19,3 +19,5 @@
 - Paystack payments: attempts are separate from verified payments; only finalize_payment() (service role, after Paystack verify API) changes balances.
 - Both hosts use the authenticated `/api/public/payments` HTTP service on Lovable for start/status/admin reconciliation; Vercel browsers forward only their bearer session to the fixed trusted host because Lovable service-role credentials are not exportable. Preserve explicit CORS origins, token validation, ownership checks and admin authorization.
 - Shared payment operations live in a server-only service reused by HTTP and server-function wrappers so settlement rules cannot diverge between hosts.
+- Tenancy requests are submitted, cancelled and reviewed through authenticated SQL functions; approval and rent charges are atomic and notifications are created by database events to work on both hosts.
+- Query data is cached briefly and heavyweight dashboard views are lazy-loaded to avoid repeat requests and unnecessary initial downloads.
