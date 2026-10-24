@@ -8,6 +8,7 @@
 - [x] Implement shared authenticated Lovable payment service for Vercel start, polling and admin re-check; security/request tests pass
 - [ ] Publish Lovable update, redeploy GitHub-to-Vercel, then verify an approved tenant's live payment on both hosts (blocked by deployment and tenant session/phone approval)
 - [x] Sidebar navigation in tenant and admin dashboards; admin Tenants page (room, paid, outstanding, semester, hostel, remove); group admin payments by tenant; nest Old Rooms & New Block Wing under Capital Home Residence
-- [ ] Dashboard-first sign-in, faster loading, remove current location
-- [ ] Move-out / next-semester requests and in-app notifications
+- [x] Dashboard-first sign-in, faster loading, remove current location
+- [x] Move-out / next-semester requests and in-app notifications implemented
+- [ ] Signed-in end-to-end request and notification checks (blocked: no account matches requesting user; sign in in preview)
 - [ ] Admin password change

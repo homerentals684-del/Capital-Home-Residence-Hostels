@@ -18,7 +18,7 @@ export const Route = createFileRoute('/_authenticated/notifications')({
 function Notifications() {
   const { user } = Route.useRouteContext();
   const qc = useQueryClient();
-  const { data: roles } = useQuery({ queryKey: ['whoami',user.id], queryFn: async () => {
+  const { data: roles } = useQuery({ queryKey: ['notification-roles',user.id], queryFn: async () => {
     const { data, error } = await supabase.from('user_roles').select('role').eq('user_id',user.id);
     if(error) throw error;
     return { isAdmin: data.some(r=>r.role==='admin') };

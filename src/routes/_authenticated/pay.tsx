@@ -35,8 +35,8 @@ function PayPage() {
     queryFn: async () => {
       const { data: p } = await supabase.from("profiles").select("full_name, email, phone").eq("id", user.id).single();
       const { data: c } = await supabase.from("rent_charges")
-        .select("id, reference, amount_cents, paid_cents, due_date, status, rooms(room_number, residences(name)), semesters(academic_year, name), tenancies!inner(status)")
-        .eq("user_id", user.id).eq("tenancies.status", "active").order("created_at", { ascending: false }).limit(1).maybeSingle();
+        .select("id, reference, amount_cents, paid_cents, due_date, status, rooms(room_number, residences(name)), semesters(academic_year, name)")
+        .eq("user_id", user.id).neq("status", "paid").order("due_date").limit(1).maybeSingle();
       return { p, c };
     },
   });
