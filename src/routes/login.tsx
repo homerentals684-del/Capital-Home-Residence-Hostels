@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
+import { SIGN_IN_DESTINATION } from "@/lib/account-navigation";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -36,7 +37,7 @@ function LoginPage() {
     const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     setBusy(false);
     if (error) return setError("Incorrect email or password.");
-    navigate({ to: "/dashboard", replace: true });
+    navigate({ to: SIGN_IN_DESTINATION, replace: true });
   }
 
   return (

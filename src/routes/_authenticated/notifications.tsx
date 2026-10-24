@@ -1,8 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Check, Bell, Loader2 } from 'lucide-react';
+import { Check, Bell, Loader2, LayoutDashboard } from 'lucide-react';
 import { toast } from 'sonner';
-import { AppShell } from '@/components/app/AppShell';
+import { AppShell, type NavItem } from '@/components/app/AppShell';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/integrations/supabase/client';
 import { tenantNav } from '@/lib/account-navigation';
@@ -31,11 +31,11 @@ function Notifications() {
     let q = supabase.from('notifications').update({read_at:new Date().toISOString()}).eq('user_id',user.id).is('read_at',null);
     if(id) q=q.eq('id',id);
     const {error}=await q;
-    if(error) return toast.error('Could not update notification');
+    if(error) { toast.error('Could not update notification'); return; }
     await qc.invalidateQueries({queryKey:['notifications']});
     await qc.invalidateQueries({queryKey:['notifications-unread']});
   }
-  const nav = roles?.isAdmin ? [{...tenantNav[0], label:'Admin Dashboard'}, {key:'notifications',label:'Notifications',icon:Bell,to:'/notifications'}] : tenantNav;
+  const nav: NavItem[] = roles?.isAdmin ? [{key:'overview', label:'Admin Dashboard', icon:LayoutDashboard, to:'/dashboard'}, {key:'notifications',label:'Notifications',icon:Bell,to:'/notifications'}] : tenantNav;
   return <AppShell title="Notifications" nav={nav} active="notifications"><div className="mb-6 flex flex-wrap items-center justify-between gap-3"><h1 className="text-4xl font-semibold">Notifications</h1><Button variant="outline" disabled={!data?.some(n=>!n.read_at)} onClick={()=>markRead()}><Check/>Mark all read</Button></div>
     {isLoading && <Loader2 className="animate-spin text-primary"/>}{error && <p className="text-destructive">Could not load notifications.</p>}
     {data?.length===0 && <p className="py-8 text-muted-foreground">No notifications yet.</p>}
