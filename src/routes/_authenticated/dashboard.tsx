@@ -1,9 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
+import { lazy, Suspense } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminDashboard } from "@/components/app/AdminDashboard";
-import { TenantDashboard, RegistrationStatus } from "@/components/app/TenantDashboard";
+const AdminDashboard = lazy(() => import("@/components/app/AdminDashboard").then(m => ({ default: m.AdminDashboard })));
+const TenantDashboard = lazy(() => import("@/components/app/TenantDashboard").then(m => ({ default: m.TenantDashboard })));
+const RegistrationStatus = lazy(() => import("@/components/app/TenantDashboard").then(m => ({ default: m.RegistrationStatus })));
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
   head: () => ({
@@ -32,7 +34,7 @@ function Dashboard() {
     },
   });
   if (isLoading || !data) return <div className="flex min-h-screen items-center justify-center"><Loader2 className="animate-spin text-primary" /></div>;
-  if (data.isAdmin) return <AdminDashboard />;
-  if (data.tenancyId) return <TenantDashboard userId={user.id} />;
-  return <RegistrationStatus userId={user.id} />;
+  return <Suspense fallback={<div className="flex min-h-screen items-center justify-center"><Loader2 className="animate-spin text-primary" /></div>}>
+    {data.isAdmin ? <AdminDashboard /> : data.tenancyId ? <TenantDashboard userId={user.id} /> : <RegistrationStatus userId={user.id} />}
+  </Suspense>;
 }

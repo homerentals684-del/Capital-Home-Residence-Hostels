@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Check, X, Plus, LayoutDashboard, UserPlus, Users, BedDouble, CalendarDays, Wallet, Trash2 } from "lucide-react";
+import { Check, X, Plus, LayoutDashboard, UserPlus, Users, BedDouble, CalendarDays, Wallet, Trash2, ClipboardList, Bell } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,11 +10,14 @@ import { ksh } from "@/lib/format";
 import { selectCls } from "@/lib/ui";
 import { AppShell, Stat, useAvatarUrl, type NavItem } from "./AppShell";
 import { AdminPayments } from "./AdminPayments";
+import { TenancyRequests } from "./TenancyRequests";
 
 const adminNav: NavItem[] = [
   { key: "overview", label: "Dashboard", icon: LayoutDashboard },
   { key: "registrations", label: "Registrations", icon: UserPlus, section: "Tenant Management" },
   { key: "tenants", label: "Active Tenants", icon: Users, section: "Tenant Management" },
+  { key: "requests", label: "Tenancy Requests", icon: ClipboardList, section: "Tenant Management" },
+  { key: "notifications", label: "Notifications", icon: Bell, section: "Tenant Management", to: "/notifications" },
   { key: "rooms", label: "Rooms", icon: BedDouble, section: "Property Management" },
   { key: "semesters", label: "Semesters", icon: CalendarDays, section: "Property Management" },
   { key: "payments", label: "Payments", icon: Wallet, section: "Finance" },
@@ -37,7 +40,7 @@ export function AdminDashboard() {
   const [section, setSection] = useState("overview");
   const headings: Record<string, string> = {
     overview: "Overview", registrations: "Tenant Registrations", tenants: "Active Tenants",
-    rooms: "Rooms", semesters: "Semesters", payments: "Payments",
+    rooms: "Rooms", semesters: "Semesters", payments: "Payments", requests: "Tenancy Requests",
   };
   return (
     <AppShell title="Admin Dashboard" name="Administrator" nav={adminNav} active={section} onNavigate={setSection}>
@@ -55,6 +58,7 @@ export function AdminDashboard() {
       )}
       {section === "registrations" && <div className="mt-6"><Registrations /></div>}
       {section === "tenants" && <div className="mt-6"><Tenants /></div>}
+      {section === "requests" && <div className="mt-6"><TenancyRequests userId="admin" admin /></div>}
       {section === "rooms" && <div className="mt-6"><Rooms /></div>}
       {section === "semesters" && <div className="mt-6"><Semesters /></div>}
       {section === "payments" && <div className="mt-6"><AdminPayments /></div>}
@@ -204,7 +208,7 @@ function RegCard({ r, rooms, onApprove, onReject }: { r: any; rooms: any[]; onAp
           <Badge variant="secondary" className="font-mono">{r.reference}</Badge>
           {over && <Badge variant="destructive">Over capacity</Badge>}
         </div>
-        <p className="text-muted-foreground">{r.profile?.email} · {r.profile?.phone} · {r.profile?.location} · {r.profile?.gender?.replaceAll("_", " ")}</p>
+        <p className="text-muted-foreground">{r.profile?.email} · {r.profile?.phone} · {r.profile?.gender?.replaceAll("_", " ")}</p>
         <p>Requested: {r.residences?.name} · {r.rooms?.room_number} · {r.semesters?.academic_year} {r.semesters?.name}</p>
         <p>Occupants: {r.occupants} · Room capacity {r.rooms?.current_occupants}/{r.rooms?.max_occupancy} · Submitted {new Date(r.created_at).toLocaleDateString("en-KE")}</p>
         {r.admin_note && <p className="text-muted-foreground">Note: {r.admin_note}</p>}

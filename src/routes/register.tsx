@@ -34,7 +34,6 @@ const schema = z.object({
   phone: z.string().refine((v) => normalizeKePhone(v) !== null, "Enter a valid Kenyan phone number"),
   password: z.string().min(8, "Password must be at least 8 characters").max(72),
   confirm: z.string(),
-  location: z.string().trim().min(2, "Enter your location").max(120),
   room_id: z.string().uuid("Select a room"),
   semester_id: z.string().uuid("Select a semester"),
   gender: z.enum(["male", "female", "prefer_not_to_say"]),
@@ -108,7 +107,7 @@ function RegisterPage() {
         password: d.password,
         options: {
           emailRedirectTo: window.location.origin,
-          data: { full_name: d.full_name, phone: normalizeKePhone(d.phone), location: d.location, gender: d.gender },
+          data: { full_name: d.full_name, phone: normalizeKePhone(d.phone), gender: d.gender },
         },
       });
       if (suErr) throw new Error(suErr.message.includes("registered") ? "An account with this email already exists." : suErr.message);
@@ -164,7 +163,6 @@ function RegisterPage() {
               <Field label="Phone number"><Input name="phone" placeholder="0712 345 678" /></Field>
               <Field label="Password"><Input name="password" type="password" /></Field>
               <Field label="Confirm password"><Input name="confirm" type="password" /></Field>
-              <Field label="Current location"><Input name="location" placeholder="e.g. Nairobi" /></Field>
             </Section>
             <Section n={2} title="Residence & room">
               <Field label="Residence / block">

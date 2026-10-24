@@ -1,17 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { Clock, XCircle, ShieldAlert, Smartphone, LayoutDashboard, Wallet, Receipt } from "lucide-react";
+import { Clock, XCircle, ShieldAlert, Smartphone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ksh } from "@/lib/format";
-import { AppShell, Stat, useAvatarUrl, type NavItem } from "./AppShell";
-
-export const tenantNav: NavItem[] = [
-  { key: "overview", label: "Dashboard", icon: LayoutDashboard, to: "/dashboard" },
-  { key: "pay", label: "Pay Rent", icon: Wallet, section: "Finance", to: "/pay" },
-  { key: "payments", label: "Payments & Receipts", icon: Receipt, section: "Finance", to: "/payments" },
-];
+import { AppShell, Stat, useAvatarUrl } from "./AppShell";
+import { tenantNav } from "@/lib/account-navigation";
 
 function useProfile(userId: string) {
   const sign = useAvatarUrl();
@@ -33,7 +28,7 @@ export function TenantDashboard({ userId }: { userId: string }) {
         .from("tenancies")
         .select("id, occupants, status, rooms(room_number, room_type, residences(name)), semesters(academic_year, name)")
         .eq("user_id", userId).eq("status", "active").single();
-      const { data: charges } = await supabase.from("rent_charges").select("*").eq("tenancy_id", t?.id ?? "").order("created_at");
+      const { data: charges } = await supabase.from("rent_charges").select("*").eq("tenancy_id", t?.id ?? "").order("due_date");
       return { t, charges: charges ?? [] };
     },
   });
