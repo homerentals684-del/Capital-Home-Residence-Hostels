@@ -15,8 +15,10 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedHomeRouteImport } from './routes/_authenticated/home'
+import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedPayRouteImport } from './routes/_authenticated/pay'
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
+import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
 import { Route as AuthenticatedReceiptIdRouteImport } from './routes/_authenticated/receipt.$id'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
@@ -50,6 +52,12 @@ const AuthenticatedHomeRoute = AuthenticatedHomeRouteImport.update({
   path: '/home',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedNotificationsRoute =
+  AuthenticatedNotificationsRouteImport.update({
+    id: '/notifications',
+    path: '/notifications',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPayRoute = AuthenticatedPayRouteImport.update({
   id: '/pay',
   path: '/pay',
@@ -58,6 +66,11 @@ const AuthenticatedPayRoute = AuthenticatedPayRouteImport.update({
 const AuthenticatedPaymentsRoute = AuthenticatedPaymentsRouteImport.update({
   id: '/payments',
   path: '/payments',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedReceiptIdRoute = AuthenticatedReceiptIdRouteImport.update({
@@ -83,8 +96,10 @@ export interface FileRoutesByFullPath {
   '/register': typeof RegisterRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/pay': typeof AuthenticatedPayRoute
   '/payments': typeof AuthenticatedPaymentsRoute
+  '/requests': typeof AuthenticatedRequestsRoute
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -95,8 +110,10 @@ export interface FileRoutesByTo {
   '/register': typeof RegisterRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/home': typeof AuthenticatedHomeRoute
+  '/notifications': typeof AuthenticatedNotificationsRoute
   '/pay': typeof AuthenticatedPayRoute
   '/payments': typeof AuthenticatedPaymentsRoute
+  '/requests': typeof AuthenticatedRequestsRoute
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -109,8 +126,10 @@ export interface FileRoutesById {
   '/register': typeof RegisterRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/home': typeof AuthenticatedHomeRoute
+  '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/pay': typeof AuthenticatedPayRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
+  '/_authenticated/requests': typeof AuthenticatedRequestsRoute
   '/_authenticated/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
@@ -123,8 +142,10 @@ export interface FileRouteTypes {
     | '/register'
     | '/dashboard'
     | '/home'
+    | '/notifications'
     | '/pay'
     | '/payments'
+    | '/requests'
     | '/receipt/$id'
     | '/api/public/payments'
     | '/api/public/paystack-webhook'
@@ -135,8 +156,10 @@ export interface FileRouteTypes {
     | '/register'
     | '/dashboard'
     | '/home'
+    | '/notifications'
     | '/pay'
     | '/payments'
+    | '/requests'
     | '/receipt/$id'
     | '/api/public/payments'
     | '/api/public/paystack-webhook'
@@ -148,8 +171,10 @@ export interface FileRouteTypes {
     | '/register'
     | '/_authenticated/dashboard'
     | '/_authenticated/home'
+    | '/_authenticated/notifications'
     | '/_authenticated/pay'
     | '/_authenticated/payments'
+    | '/_authenticated/requests'
     | '/_authenticated/receipt/$id'
     | '/api/public/payments'
     | '/api/public/paystack-webhook'
@@ -208,6 +233,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedHomeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/notifications': {
+      id: '/_authenticated/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/pay': {
       id: '/_authenticated/pay'
       path: '/pay'
@@ -220,6 +252,13 @@ declare module '@tanstack/react-router' {
       path: '/payments'
       fullPath: '/payments'
       preLoaderRoute: typeof AuthenticatedPaymentsRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/requests': {
+      id: '/_authenticated/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof AuthenticatedRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/receipt/$id': {
@@ -249,16 +288,20 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedHomeRoute: typeof AuthenticatedHomeRoute
+  AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedPayRoute: typeof AuthenticatedPayRoute
   AuthenticatedPaymentsRoute: typeof AuthenticatedPaymentsRoute
+  AuthenticatedRequestsRoute: typeof AuthenticatedRequestsRoute
   AuthenticatedReceiptIdRoute: typeof AuthenticatedReceiptIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedHomeRoute: AuthenticatedHomeRoute,
+  AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedPayRoute: AuthenticatedPayRoute,
   AuthenticatedPaymentsRoute: AuthenticatedPaymentsRoute,
+  AuthenticatedRequestsRoute: AuthenticatedRequestsRoute,
   AuthenticatedReceiptIdRoute: AuthenticatedReceiptIdRoute,
 }
 
