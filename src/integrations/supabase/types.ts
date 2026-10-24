@@ -44,6 +44,41 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_attempts: {
         Row: {
           amount_cents: number
@@ -518,6 +553,70 @@ export type Database = {
           },
         ]
       }
+      tenancy_requests: {
+        Row: {
+          admin_note: string
+          created_at: string
+          id: string
+          kind: string
+          note: string
+          requested_date: string | null
+          reviewed_at: string | null
+          semester_id: string | null
+          status: string
+          tenancy_id: string
+          user_id: string
+        }
+        Insert: {
+          admin_note?: string
+          created_at?: string
+          id?: string
+          kind: string
+          note?: string
+          requested_date?: string | null
+          reviewed_at?: string | null
+          semester_id?: string | null
+          status?: string
+          tenancy_id: string
+          user_id: string
+        }
+        Update: {
+          admin_note?: string
+          created_at?: string
+          id?: string
+          kind?: string
+          note?: string
+          requested_date?: string | null
+          reviewed_at?: string | null
+          semester_id?: string | null
+          status?: string
+          tenancy_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenancy_requests_semester_id_fkey"
+            columns: ["semester_id"]
+            isOneToOne: false
+            referencedRelation: "semesters"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenancy_requests_tenancy_id_fkey"
+            columns: ["tenancy_id"]
+            isOneToOne: false
+            referencedRelation: "tenancies"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenancy_requests_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -545,6 +644,10 @@ export type Database = {
         Args: { _note?: string; _reg_id: string; _room_id?: string }
         Returns: string
       }
+      cancel_tenancy_request: {
+        Args: { _request_id: string }
+        Returns: undefined
+      }
       end_tenancy: {
         Args: { _note?: string; _tenancy_id: string }
         Returns: undefined
@@ -569,6 +672,20 @@ export type Database = {
       reject_registration: {
         Args: { _note: string; _reg_id: string }
         Returns: undefined
+      }
+      review_tenancy_request: {
+        Args: { _approve: boolean; _note?: string; _request_id: string }
+        Returns: undefined
+      }
+      submit_tenancy_request: {
+        Args: {
+          _kind: string
+          _note?: string
+          _requested_date?: string
+          _semester_id?: string
+          _tenancy_id: string
+        }
+        Returns: string
       }
     }
     Enums: {
