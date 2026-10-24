@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { AppShell } from "@/components/app/AppShell";
-import { tenantNav } from "@/components/app/TenantDashboard";
+import { tenantNav } from "@/lib/account-navigation";
 import { ksh } from "@/lib/format";
 import { startMpesaPayment, checkPaymentStatus } from "@/lib/payments-client";
 

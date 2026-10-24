@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { AppShell } from "@/components/app/AppShell";
-import { tenantNav } from "@/components/app/TenantDashboard";
+import { tenantNav } from "@/lib/account-navigation";
 import { ksh } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/payments")({

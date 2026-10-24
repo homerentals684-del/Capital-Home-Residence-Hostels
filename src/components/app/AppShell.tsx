@@ -3,6 +3,8 @@ import { useState, type ReactNode } from "react";
 import { LogOut, PanelLeftClose, PanelLeftOpen, type LucideIcon } from "lucide-react";
 import logo from "@/assets/logo.png";
 import { Button } from "@/components/ui/button";
+import { useQueryClient } from "@tanstack/react-query";
+import { NotificationBell } from "./NotificationBell";
 import { supabase } from "@/integrations/supabase/client";
 
 export type NavItem = {
@@ -22,6 +24,7 @@ export function AppShell({ title, name, nav, active, onNavigate, children }: {
   children: ReactNode;
 }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -71,7 +74,7 @@ export function AppShell({ title, name, nav, active, onNavigate, children }: {
       <div className="border-t border-sidebar-border p-3">
         <button
           type="button"
-          onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/", replace: true }); }}
+          onClick={async () => { await queryClient.cancelQueries(); queryClient.clear(); await supabase.auth.signOut(); navigate({ to: "/login", replace: true }); }}
           className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm text-sidebar-foreground/80 hover:bg-sidebar-accent ${collapsed ? "justify-center px-0" : ""}`}
         >
           <LogOut className="h-4 w-4 shrink-0" />{!collapsed && <span>Sign out</span>}
@@ -100,6 +103,7 @@ export function AppShell({ title, name, nav, active, onNavigate, children }: {
               <span className="text-sm font-medium text-muted-foreground">{title}</span>
             </div>
             <div className="flex items-center gap-3">
+              <NotificationBell />
               <Button asChild variant="ghost" size="sm"><Link to="/home">Home</Link></Button>
               {name && <span className="hidden text-sm sm:block">{name}</span>}
             </div>
