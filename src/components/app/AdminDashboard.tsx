@@ -42,7 +42,7 @@ export function AdminDashboard() {
   const [section, setSection] = useState("overview");
   const headings: Record<string, string> = {
     overview: "Overview", registrations: "Tenant Registrations", tenants: "Active Tenants",
-    rooms: "Rooms", semesters: "Semesters", payments: "Payments", requests: "Tenancy Requests",
+    rooms: "Rooms", semesters: "Semesters", payments: "Payments", requests: "Tenancy Requests", sms: "SMS Messages",
   };
   return (
     <AppShell title="Admin Dashboard" name="Administrator" nav={adminNav} active={section} onNavigate={setSection}>
@@ -64,6 +64,7 @@ export function AdminDashboard() {
       {section === "rooms" && <div className="mt-6"><Rooms /></div>}
       {section === "semesters" && <div className="mt-6"><Semesters /></div>}
       {section === "payments" && <div className="mt-6"><AdminPayments /></div>}
+      {section === "sms" && <div className="mt-6"><AdminSms /></div>}
     </AppShell>
   );
 }
