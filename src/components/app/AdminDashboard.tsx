@@ -11,6 +11,7 @@ import { selectCls } from "@/lib/ui";
 import { AppShell, Stat, useAvatarUrl, type NavItem } from "./AppShell";
 import { AdminPayments } from "./AdminPayments";
 import { TenancyRequests } from "./TenancyRequests";
+import { AdminSms } from "./AdminSms";
 
 const adminNav: NavItem[] = [
   { key: "overview", label: "Dashboard", icon: LayoutDashboard },
@@ -18,6 +19,7 @@ const adminNav: NavItem[] = [
   { key: "tenants", label: "Active Tenants", icon: Users, section: "Tenant Management" },
   { key: "requests", label: "Tenancy Requests", icon: ClipboardList, section: "Tenant Management" },
   { key: "notifications", label: "Notifications", icon: Bell, section: "Tenant Management", to: "/notifications" },
+  { key: "sms", label: "SMS", icon: MessageSquare, section: "Tenant Management" },
   { key: "rooms", label: "Rooms", icon: BedDouble, section: "Property Management" },
   { key: "semesters", label: "Semesters", icon: CalendarDays, section: "Property Management" },
   { key: "payments", label: "Payments", icon: Wallet, section: "Finance" },
