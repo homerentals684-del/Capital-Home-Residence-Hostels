@@ -1,7 +1,7 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
-import { Check, X, Plus, LayoutDashboard, UserPlus, Users, BedDouble, CalendarDays, Wallet, Trash2, ClipboardList, Bell } from "lucide-react";
+import { Check, X, Plus, LayoutDashboard, UserPlus, Users, BedDouble, CalendarDays, Wallet, Trash2, ClipboardList, Bell, MessageSquare } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { selectCls } from "@/lib/ui";
 import { AppShell, Stat, useAvatarUrl, type NavItem } from "./AppShell";
 import { AdminPayments } from "./AdminPayments";
 import { TenancyRequests } from "./TenancyRequests";
+import { AdminSms } from "./AdminSms";
 
 const adminNav: NavItem[] = [
   { key: "overview", label: "Dashboard", icon: LayoutDashboard },
@@ -18,6 +19,7 @@ const adminNav: NavItem[] = [
   { key: "tenants", label: "Active Tenants", icon: Users, section: "Tenant Management" },
   { key: "requests", label: "Tenancy Requests", icon: ClipboardList, section: "Tenant Management" },
   { key: "notifications", label: "Notifications", icon: Bell, section: "Tenant Management", to: "/notifications" },
+  { key: "sms", label: "SMS", icon: MessageSquare, section: "Tenant Management" },
   { key: "rooms", label: "Rooms", icon: BedDouble, section: "Property Management" },
   { key: "semesters", label: "Semesters", icon: CalendarDays, section: "Property Management" },
   { key: "payments", label: "Payments", icon: Wallet, section: "Finance" },
@@ -40,7 +42,7 @@ export function AdminDashboard() {
   const [section, setSection] = useState("overview");
   const headings: Record<string, string> = {
     overview: "Overview", registrations: "Tenant Registrations", tenants: "Active Tenants",
-    rooms: "Rooms", semesters: "Semesters", payments: "Payments", requests: "Tenancy Requests",
+    rooms: "Rooms", semesters: "Semesters", payments: "Payments", requests: "Tenancy Requests", sms: "SMS Messages",
   };
   return (
     <AppShell title="Admin Dashboard" name="Administrator" nav={adminNav} active={section} onNavigate={setSection}>
@@ -62,6 +64,7 @@ export function AdminDashboard() {
       {section === "rooms" && <div className="mt-6"><Rooms /></div>}
       {section === "semesters" && <div className="mt-6"><Semesters /></div>}
       {section === "payments" && <div className="mt-6"><AdminPayments /></div>}
+      {section === "sms" && <div className="mt-6"><AdminSms /></div>}
     </AppShell>
   );
 }

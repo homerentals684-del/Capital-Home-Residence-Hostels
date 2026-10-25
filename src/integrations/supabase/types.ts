@@ -495,6 +495,56 @@ export type Database = {
         }
         Relationships: []
       }
+      sms_messages: {
+        Row: {
+          cost_cents: number | null
+          created_at: string
+          error: string | null
+          id: string
+          kind: string
+          message: string
+          phone: string
+          provider_id: string | null
+          recipient_user_id: string | null
+          sent_by: string
+          status: string
+        }
+        Insert: {
+          cost_cents?: number | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          kind?: string
+          message: string
+          phone: string
+          provider_id?: string | null
+          recipient_user_id?: string | null
+          sent_by: string
+          status?: string
+        }
+        Update: {
+          cost_cents?: number | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          kind?: string
+          message?: string
+          phone?: string
+          provider_id?: string | null
+          recipient_user_id?: string | null
+          sent_by?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_messages_recipient_user_id_fkey"
+            columns: ["recipient_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tenancies: {
         Row: {
           ended_at: string | null
