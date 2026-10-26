@@ -7,9 +7,9 @@ const AT_ENDPOINT = "https://api.africastalking.com/version1/messaging";
 export type AtSmsResult = {
   ok: boolean;
   status: string;
-  messageId?: string;
-  costCents?: number | null;
-  error?: string;
+  messageId?: string | undefined;
+  costCents?: number | null | undefined;
+  error?: string | undefined;
 };
 
 export async function sendAfricasTalkingSms(to: string, message: string): Promise<AtSmsResult> {

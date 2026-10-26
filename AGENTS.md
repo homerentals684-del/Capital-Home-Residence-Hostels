@@ -21,3 +21,4 @@
 - Shared payment operations live in a server-only service reused by HTTP and server-function wrappers so settlement rules cannot diverge between hosts.
 - Tenancy requests are submitted, cancelled and reviewed through authenticated SQL functions; approval and rent charges are atomic and notifications are created by database events to work on both hosts.
 - Query data is cached briefly and heavyweight dashboard views are lazy-loaded to avoid repeat requests and unnecessary initial downloads.
+- SMS goes through Africa's Talking production endpoint only (src/lib/africastalking.server.ts); credentials stay in server secrets (AFRICASTALKING_API_KEY, AFRICASTALKING_USERNAME), sending is admin-only via has_role(), every send is logged in public.sms_messages, and identical messages to the same number within 24h are skipped.
