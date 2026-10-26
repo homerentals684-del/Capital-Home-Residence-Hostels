@@ -107,7 +107,7 @@ export const sendSmsMessages = createServerFn({ method: "POST" })
       .eq("status", "active")
       .in("user_id", data.recipientIds);
 
-    const results: { userId: string; name: string; phone: string; outcome: "sent" | "failed" | "skipped"; detail?: string }[] = [];
+    const results: { userId: string; name: string; phone: string; outcome: "sent" | "failed" | "skipped"; detail?: string | undefined }[] = [];
     const dedupeSince = new Date(Date.now() - DEDUPE_WINDOW_HOURS * 3600 * 1000).toISOString();
 
     for (const id of data.recipientIds) {
