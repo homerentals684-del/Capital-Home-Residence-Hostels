@@ -32,7 +32,7 @@ export function AdminSms() {
 function Compose() {
   const qc = useQueryClient();
   const send = useServerFn(sendSmsMessages);
-  const { data: recipients, isLoading } = useQuery({ queryKey: ["sms-recipients"], queryFn: () => listSmsRecipients({ data: {} }) });
+  const { data: recipients, isLoading } = useQuery({ queryKey: ["sms-recipients"], queryFn: () => listSmsRecipients() });
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [message, setMessage] = useState("");
   const [q, setQ] = useState("");
@@ -145,7 +145,7 @@ function Compose() {
 }
 
 function SmsHistory() {
-  const { data, isLoading } = useQuery({ queryKey: ["sms-history"], queryFn: () => listSmsHistory({ data: {} }) });
+  const { data, isLoading } = useQuery({ queryKey: ["sms-history"], queryFn: () => listSmsHistory() });
   const totalCost = (data ?? []).reduce((s, m) => s + (m.cost_cents ?? 0), 0);
   return (
     <div className="space-y-3">
