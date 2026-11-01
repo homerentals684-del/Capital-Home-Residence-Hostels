@@ -13,5 +13,6 @@
 - [ ] Signed-in end-to-end request and notification checks (blocked: no account matches requesting user; sign in in preview)
 - [ ] Admin password change
 
-- [ ] Cross-host SMS sending and tests
-- [ ] Send one authorized real SMS to Elvis Okinda (blocked: two matching active tenants; select room)
+- [x] Cross-host SMS implementation and security tests; signed-in admin SMS flow verified in preview
+- [ ] Publish Lovable SMS update and redeploy GitHub-to-Vercel (waiting on publishing approval)
+- [ ] Confirm successful real SMS to Elvis Okinda, Old Room-01 (live attempt rejected by provider: UserInBlacklist; recipient must opt in before an authorized retry)
