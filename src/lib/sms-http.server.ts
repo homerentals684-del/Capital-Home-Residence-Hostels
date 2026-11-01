@@ -1,6 +1,6 @@
 import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
-import { PAYMENT_ORIGINS } from "./SMS-contract";
+import { PAYMENT_ORIGINS } from "./payment-contract";
 import { smsRequestSchema } from "./sms-contract";
 import { getSmsRecipients, getSmsHistory, sendSms } from "./sms-service.server";
 
