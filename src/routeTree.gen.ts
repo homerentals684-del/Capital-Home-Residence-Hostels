@@ -22,6 +22,7 @@ import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedReceiptIdRouteImport } from './routes/_authenticated/receipt.$id'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
 import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
+import { Route as ApiPublicSmsRouteImport } from './routes/api/public/sms'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -89,6 +90,11 @@ const ApiPublicPaystackWebhookRoute =
     path: '/api/public/paystack-webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicSmsRoute = ApiPublicSmsRouteImport.update({
+  id: '/api/public/sms',
+  path: '/api/public/sms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +109,7 @@ export interface FileRoutesByFullPath {
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/sms': typeof ApiPublicSmsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,6 +124,7 @@ export interface FileRoutesByTo {
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/sms': typeof ApiPublicSmsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +141,7 @@ export interface FileRoutesById {
   '/_authenticated/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
   '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/sms': typeof ApiPublicSmsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,6 +158,7 @@ export interface FileRouteTypes {
     | '/receipt/$id'
     | '/api/public/payments'
     | '/api/public/paystack-webhook'
+    | '/api/public/sms'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -163,6 +173,7 @@ export interface FileRouteTypes {
     | '/receipt/$id'
     | '/api/public/payments'
     | '/api/public/paystack-webhook'
+    | '/api/public/sms'
   id:
     | '__root__'
     | '/'
@@ -178,6 +189,7 @@ export interface FileRouteTypes {
     | '/_authenticated/receipt/$id'
     | '/api/public/payments'
     | '/api/public/paystack-webhook'
+    | '/api/public/sms'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   RegisterRoute: typeof RegisterRoute
   ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
   ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
+  ApiPublicSmsRoute: typeof ApiPublicSmsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -282,6 +295,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/sms': {
+      id: '/api/public/sms'
+      path: '/api/public/sms'
+      fullPath: '/api/public/sms'
+      preLoaderRoute: typeof ApiPublicSmsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -315,6 +335,7 @@ const rootRouteChildren: RootRouteChildren = {
   RegisterRoute: RegisterRoute,
   ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
   ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
+  ApiPublicSmsRoute: ApiPublicSmsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
