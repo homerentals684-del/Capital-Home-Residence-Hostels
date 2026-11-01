@@ -36,3 +36,9 @@ Deployment order:
 4. Sign in as an approved tenant on each site and make an authorized small partial payment. Confirm the receipt and balance on both sites. A live payment requires the payer's phone approval; automated checks do not send live STK requests.
 
 Only the explicit production/preview origins in `src/lib/payment-contract.ts` may call the service. Add future custom domains there deliberately; never allow arbitrary origins or forward session tokens to a user-supplied host.
+
+## SMS on Lovable and Vercel
+
+Publish Lovable first to deploy `/api/public/sms`, then redeploy the synced GitHub code on Vercel. The Vercel SMS page forwards only the signed-in admin's bearer token to the trusted Lovable host; no SMS secrets belong in GitHub or Vercel browser settings. `AFRICASTALKING_API_KEY` and `AFRICASTALKING_USERNAME` are configured as server secrets on Lovable. Only the production messaging endpoint is used.
+
+Select one tenant, send a paid test SMS with confirmation, and check History for the provider response and cost. Bulk sending is blocked until a successful provider-accepted test is logged. “Sent” means Africa's Talking accepted the message, not confirmed handset delivery; ask the recipient to confirm receipt. No schedule or automatic sending is enabled.

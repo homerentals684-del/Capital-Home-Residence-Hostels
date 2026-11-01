@@ -12,3 +12,6 @@
 - [x] Move-out / next-semester requests and in-app notifications implemented
 - [ ] Signed-in end-to-end request and notification checks (blocked: no account matches requesting user; sign in in preview)
 - [ ] Admin password change
+
+- [ ] Cross-host SMS sending and tests
+- [ ] Send one authorized real SMS to Elvis Okinda (blocked: two matching active tenants; select room)

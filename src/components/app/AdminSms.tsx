@@ -2,12 +2,11 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { MessageSquare, Send, History, Sparkles } from "lucide-react";
-import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { ksh } from "@/lib/format";
-import { listSmsRecipients, sendSmsMessages, listSmsHistory, type SmsRecipient } from "@/lib/sms.functions";
+import { listSmsRecipients, sendSmsMessages, listSmsHistory, type SmsRecipient } from "@/lib/sms-client";
 
 const REMINDER_TEMPLATE =
   "Dear {name}, this is a rent reminder from Capital Home Residence. Your balance is {balance} ({status}). Kindly pay by {due}. Thank you.";
@@ -31,8 +30,8 @@ export function AdminSms() {
 
 function Compose() {
   const qc = useQueryClient();
-  const send = useServerFn(sendSmsMessages);
-  const { data: recipients, isLoading } = useQuery({ queryKey: ["sms-recipients"], queryFn: () => listSmsRecipients() });
+  const send = sendSmsMessages;
+  const { data: recipients, isLoading, error } = useQuery({ queryKey: ["sms-recipients"], queryFn: () => listSmsRecipients() });
   const [selected, setSelected] = useState<Record<string, boolean>>({});
   const [message, setMessage] = useState("");
   const [q, setQ] = useState("");
@@ -80,6 +79,7 @@ function Compose() {
   return (
     <div className="grid gap-6 lg:grid-cols-2">
       <div className="space-y-3">
+        {error && <p role="alert" className="text-sm text-destructive">{error.message}</p>}
         <div className="flex flex-wrap items-center gap-2">
           <Input className="w-full sm:w-64" placeholder="Search tenant, room, phone" value={q} onChange={(e) => setQ(e.target.value)} />
           <label className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -145,10 +145,11 @@ function Compose() {
 }
 
 function SmsHistory() {
-  const { data, isLoading } = useQuery({ queryKey: ["sms-history"], queryFn: () => listSmsHistory() });
+  const { data, isLoading, error } = useQuery({ queryKey: ["sms-history"], queryFn: () => listSmsHistory() });
   const totalCost = (data ?? []).reduce((s, m) => s + (m.cost_cents ?? 0), 0);
   return (
     <div className="space-y-3">
+      {error && <p role="alert" className="text-sm text-destructive">{error.message}</p>}
       <p className="text-sm text-muted-foreground">
         {(data ?? []).length} messages · Total cost reported by provider: {ksh(totalCost)}
       </p>
