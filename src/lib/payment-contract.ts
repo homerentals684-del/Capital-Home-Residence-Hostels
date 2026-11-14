@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-// One trusted host owns Paystack credentials and verified settlement for both sites.
+// One trusted host owns PayHero credentials and verified settlement for both sites.
 export const PAYMENT_SERVICE_ORIGIN = "https://project--f75de88d-4c49-43a5-9d77-d7cd290225f7.lovable.app";
 export const PAYMENT_PATH = "/api/public/payments";
 export const PAYMENT_ORIGINS = new Set([

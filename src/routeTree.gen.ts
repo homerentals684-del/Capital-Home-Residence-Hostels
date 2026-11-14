@@ -19,9 +19,11 @@ import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authen
 import { Route as AuthenticatedPayRouteImport } from './routes/_authenticated/pay'
 import { Route as AuthenticatedPaymentsRouteImport } from './routes/_authenticated/payments'
 import { Route as AuthenticatedRequestsRouteImport } from './routes/_authenticated/requests'
+import { Route as RRoomIdRouteImport } from './routes/r/$roomId'
 import { Route as AuthenticatedReceiptIdRouteImport } from './routes/_authenticated/receipt.$id'
+import { Route as ApiPublicPayheroWebhookRouteImport } from './routes/api/public/payhero-webhook'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
-import { Route as ApiPublicPaystackWebhookRouteImport } from './routes/api/public/paystack-webhook'
+import { Route as ApiPublicRoomPayRouteImport } from './routes/api/public/room-pay'
 import { Route as ApiPublicSmsRouteImport } from './routes/api/public/sms'
 
 const IndexRoute = IndexRouteImport.update({
@@ -74,22 +76,31 @@ const AuthenticatedRequestsRoute = AuthenticatedRequestsRouteImport.update({
   path: '/requests',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const RRoomIdRoute = RRoomIdRouteImport.update({
+  id: '/r/$roomId',
+  path: '/r/$roomId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedReceiptIdRoute = AuthenticatedReceiptIdRouteImport.update({
   id: '/receipt/$id',
   path: '/receipt/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiPublicPayheroWebhookRoute = ApiPublicPayheroWebhookRouteImport.update({
+  id: '/api/public/payhero-webhook',
+  path: '/api/public/payhero-webhook',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
   id: '/api/public/payments',
   path: '/api/public/payments',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicPaystackWebhookRoute =
-  ApiPublicPaystackWebhookRouteImport.update({
-    id: '/api/public/paystack-webhook',
-    path: '/api/public/paystack-webhook',
-    getParentRoute: () => rootRouteImport,
-  } as any)
+const ApiPublicRoomPayRoute = ApiPublicRoomPayRouteImport.update({
+  id: '/api/public/room-pay',
+  path: '/api/public/room-pay',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicSmsRoute = ApiPublicSmsRouteImport.update({
   id: '/api/public/sms',
   path: '/api/public/sms',
@@ -106,9 +117,11 @@ export interface FileRoutesByFullPath {
   '/pay': typeof AuthenticatedPayRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/requests': typeof AuthenticatedRequestsRoute
+  '/r/$roomId': typeof RRoomIdRoute
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
+  '/api/public/payhero-webhook': typeof ApiPublicPayheroWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
-  '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/room-pay': typeof ApiPublicRoomPayRoute
   '/api/public/sms': typeof ApiPublicSmsRoute
 }
 export interface FileRoutesByTo {
@@ -121,9 +134,11 @@ export interface FileRoutesByTo {
   '/pay': typeof AuthenticatedPayRoute
   '/payments': typeof AuthenticatedPaymentsRoute
   '/requests': typeof AuthenticatedRequestsRoute
+  '/r/$roomId': typeof RRoomIdRoute
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
+  '/api/public/payhero-webhook': typeof ApiPublicPayheroWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
-  '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/room-pay': typeof ApiPublicRoomPayRoute
   '/api/public/sms': typeof ApiPublicSmsRoute
 }
 export interface FileRoutesById {
@@ -138,9 +153,11 @@ export interface FileRoutesById {
   '/_authenticated/pay': typeof AuthenticatedPayRoute
   '/_authenticated/payments': typeof AuthenticatedPaymentsRoute
   '/_authenticated/requests': typeof AuthenticatedRequestsRoute
+  '/r/$roomId': typeof RRoomIdRoute
   '/_authenticated/receipt/$id': typeof AuthenticatedReceiptIdRoute
+  '/api/public/payhero-webhook': typeof ApiPublicPayheroWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
-  '/api/public/paystack-webhook': typeof ApiPublicPaystackWebhookRoute
+  '/api/public/room-pay': typeof ApiPublicRoomPayRoute
   '/api/public/sms': typeof ApiPublicSmsRoute
 }
 export interface FileRouteTypes {
@@ -155,9 +172,11 @@ export interface FileRouteTypes {
     | '/pay'
     | '/payments'
     | '/requests'
+    | '/r/$roomId'
     | '/receipt/$id'
+    | '/api/public/payhero-webhook'
     | '/api/public/payments'
-    | '/api/public/paystack-webhook'
+    | '/api/public/room-pay'
     | '/api/public/sms'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -170,9 +189,11 @@ export interface FileRouteTypes {
     | '/pay'
     | '/payments'
     | '/requests'
+    | '/r/$roomId'
     | '/receipt/$id'
+    | '/api/public/payhero-webhook'
     | '/api/public/payments'
-    | '/api/public/paystack-webhook'
+    | '/api/public/room-pay'
     | '/api/public/sms'
   id:
     | '__root__'
@@ -186,9 +207,11 @@ export interface FileRouteTypes {
     | '/_authenticated/pay'
     | '/_authenticated/payments'
     | '/_authenticated/requests'
+    | '/r/$roomId'
     | '/_authenticated/receipt/$id'
+    | '/api/public/payhero-webhook'
     | '/api/public/payments'
-    | '/api/public/paystack-webhook'
+    | '/api/public/room-pay'
     | '/api/public/sms'
   fileRoutesById: FileRoutesById
 }
@@ -197,8 +220,10 @@ export interface RootRouteChildren {
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
+  RRoomIdRoute: typeof RRoomIdRoute
+  ApiPublicPayheroWebhookRoute: typeof ApiPublicPayheroWebhookRoute
   ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
-  ApiPublicPaystackWebhookRoute: typeof ApiPublicPaystackWebhookRoute
+  ApiPublicRoomPayRoute: typeof ApiPublicRoomPayRoute
   ApiPublicSmsRoute: typeof ApiPublicSmsRoute
 }
 
@@ -274,12 +299,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRequestsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/r/$roomId': {
+      id: '/r/$roomId'
+      path: '/r/$roomId'
+      fullPath: '/r/$roomId'
+      preLoaderRoute: typeof RRoomIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/receipt/$id': {
       id: '/_authenticated/receipt/$id'
       path: '/receipt/$id'
       fullPath: '/receipt/$id'
       preLoaderRoute: typeof AuthenticatedReceiptIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/public/payhero-webhook': {
+      id: '/api/public/payhero-webhook'
+      path: '/api/public/payhero-webhook'
+      fullPath: '/api/public/payhero-webhook'
+      preLoaderRoute: typeof ApiPublicPayheroWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/payments': {
       id: '/api/public/payments'
@@ -288,11 +327,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/paystack-webhook': {
-      id: '/api/public/paystack-webhook'
-      path: '/api/public/paystack-webhook'
-      fullPath: '/api/public/paystack-webhook'
-      preLoaderRoute: typeof ApiPublicPaystackWebhookRouteImport
+    '/api/public/room-pay': {
+      id: '/api/public/room-pay'
+      path: '/api/public/room-pay'
+      fullPath: '/api/public/room-pay'
+      preLoaderRoute: typeof ApiPublicRoomPayRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/sms': {
@@ -333,8 +372,10 @@ const rootRouteChildren: RootRouteChildren = {
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
+  RRoomIdRoute: RRoomIdRoute,
+  ApiPublicPayheroWebhookRoute: ApiPublicPayheroWebhookRoute,
   ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
-  ApiPublicPaystackWebhookRoute: ApiPublicPaystackWebhookRoute,
+  ApiPublicRoomPayRoute: ApiPublicRoomPayRoute,
   ApiPublicSmsRoute: ApiPublicSmsRoute,
 }
 export const routeTree = rootRouteImport

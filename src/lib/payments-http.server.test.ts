@@ -19,7 +19,8 @@ beforeEach(() => {
   vi.stubEnv("SUPABASE_URL", "https://backend.example");
   vi.stubEnv("SUPABASE_PUBLISHABLE_KEY", "test-public");
   vi.stubEnv("SUPABASE_SERVICE_ROLE_KEY", "test-private");
-  vi.stubEnv("PAYSTACK_SECRET_KEY", "test-paystack");
+  vi.stubEnv("PAYHERO_AUTH_TOKEN", "Basic test");
+  vi.stubEnv("PAYHERO_CHANNEL_ID", "1");
   mocks.getUser.mockResolvedValue({ data: { user: { id: "tenant-1" } }, error: null });
 });
 describe("authenticated cross-host payments", () => {

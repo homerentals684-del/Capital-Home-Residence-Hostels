@@ -88,9 +88,11 @@ export type Database = {
           paystack_id: number | null
           phone: string
           provider_message: string | null
+          provider_reference: string | null
           provider_status: string | null
           reference: string
           rent_charge_id: string
+          source: string
           status: Database["public"]["Enums"]["attempt_status"]
           updated_at: string
           user_id: string
@@ -103,9 +105,11 @@ export type Database = {
           paystack_id?: number | null
           phone: string
           provider_message?: string | null
+          provider_reference?: string | null
           provider_status?: string | null
           reference: string
           rent_charge_id: string
+          source?: string
           status?: Database["public"]["Enums"]["attempt_status"]
           updated_at?: string
           user_id: string
@@ -118,9 +122,11 @@ export type Database = {
           paystack_id?: number | null
           phone?: string
           provider_message?: string | null
+          provider_reference?: string | null
           provider_status?: string | null
           reference?: string
           rent_charge_id?: string
+          source?: string
           status?: Database["public"]["Enums"]["attempt_status"]
           updated_at?: string
           user_id?: string

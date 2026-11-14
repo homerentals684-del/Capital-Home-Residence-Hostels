@@ -40,7 +40,7 @@ function Receipt() {
     ["Residence & room", `${p.rent_charges?.rooms?.residences?.name} · ${p.rent_charges?.rooms?.room_number}`],
     ["Academic year & semester", `${p.rent_charges?.semesters?.academic_year} ${p.rent_charges?.semesters?.name}`],
     ["Payment date", new Date(p.paid_at).toLocaleString("en-KE")], ["Method", p.method],
-    ["Paystack reference", p.paystack_reference], ["Rent charge", p.rent_charges?.reference ?? ""],
+    ["Payment reference", p.paystack_reference], ["Rent charge", p.rent_charges?.reference ?? ""],
     ["Balance after payment", ksh(p.balance_after_cents)],
   ];
   return (

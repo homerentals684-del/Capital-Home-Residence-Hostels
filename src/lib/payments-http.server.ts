@@ -20,7 +20,7 @@ export async function handlePaymentRequest(request: Request): Promise<Response> 
   // Secrets stay on the Lovable host; Vercel sends only the caller's session.
   const url = process.env["SUPABASE_URL"];
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"];
-  if (!url || !key || !process.env["PAYSTACK_SECRET_KEY"] || !process.env["SUPABASE_SERVICE_ROLE_KEY"]) {
+  if (!url || !key || !process.env["PAYHERO_AUTH_TOKEN"] || !process.env["SUPABASE_SERVICE_ROLE_KEY"]) {
     console.error("Payment service configuration incomplete");
     return reply({ error: "Payments are not configured on the payment service yet." }, 503);
   }
