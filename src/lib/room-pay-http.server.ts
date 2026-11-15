@@ -50,7 +50,10 @@ export async function handleRoomPayRequest(request: Request): Promise<Response> 
       return reply({ firstName: (tenant.full_name ?? "").split(" ")[0], outstandingCents: charge ? charge.amount_cents - charge.paid_cents : 0, dueDate: charge?.due_date ?? null });
     }
     if (!charge) return reply({ ok: false, error: "You have no outstanding rent." });
-    return reply(await pushForCharge({ chargeId: charge.id, userId: tenant.id, phone, mode: req.mode, amountKsh: req.amountKsh, source: "room_qr" }));
+    // Anyone (parent, friend) may pay; money is still recorded on this tenant's room charge.
+    const payer = req.payerPhone ? normalizeKePhone(req.payerPhone) : phone;
+    if (!payer) return reply({ ok: false, error: "Enter a valid M-Pesa number for the payer." });
+    return reply(await pushForCharge({ chargeId: charge.id, userId: tenant.id, phone: payer, mode: req.mode, amountKsh: req.amountKsh, source: "room_qr" }));
   } catch (e) {
     console.error("Room pay failed", e instanceof Error ? e.name : "UnknownError");
     return reply({ error: "Payment service unavailable. Please try again shortly." }, 503);

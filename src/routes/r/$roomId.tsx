@@ -38,6 +38,7 @@ function RoomPay() {
   const [tenant, setTenant] = useState<{ firstName: string; outstandingCents: number; dueDate: string | null } | null>(null);
   const [mode, setMode] = useState<"full" | "partial">("full");
   const [amount, setAmount] = useState("");
+  const [payer, setPayer] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [pending, setPending] = useState<string | null>(null);
@@ -74,7 +75,7 @@ function RoomPay() {
     if (mode === "partial" && (!amountKsh || amountKsh * 100 >= tenant.outstandingCents)) return setError("Enter an amount above zero and below your balance.");
     setBusy(true);
     try {
-      const r = await call<{ ok: boolean; error?: string; reference?: string }>({ action: "start", roomId, phone, mode, amountKsh });
+      const r = await call<{ ok: boolean; error?: string; reference?: string }>({ action: "start", roomId, phone, payerPhone: payer.trim() || undefined, mode, amountKsh });
       if (!r.ok || !r.reference) setError(r.error ?? "Could not send M-Pesa request."); else setPending(r.reference);
     } catch (err) { setError((err as Error).message); }
     setBusy(false);
@@ -112,8 +113,9 @@ function RoomPay() {
                 ))}
               </div>
               {mode === "partial" && <div className="space-y-1.5"><Label htmlFor="amt">Amount (KSh)</Label><Input id="amt" type="number" inputMode="numeric" min={1} value={amount} onChange={(e) => setAmount(e.target.value)} /></div>}
+              <div className="space-y-1.5"><Label htmlFor="payer">M-Pesa number to pay from</Label><Input id="payer" inputMode="tel" value={payer} onChange={(e) => setPayer(e.target.value)} placeholder={phone} /><p className="text-xs text-muted-foreground">Leave blank to use your number, or enter a parent or friend's number. The payment is still recorded for your room.</p></div>
               {error && <p className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</p>}
-              {pending && <div className="flex gap-3 rounded-lg bg-accent p-3 text-sm"><Loader2 className="h-5 w-5 shrink-0 animate-spin text-primary" />Check your phone and enter your M-Pesa PIN.</div>}
+              {pending && <div className="flex gap-3 rounded-lg bg-accent p-3 text-sm"><Loader2 className="h-5 w-5 shrink-0 animate-spin text-primary" />Check the paying phone and enter the M-Pesa PIN.</div>}
               {result === "failed" && <p className="flex items-center gap-2 text-sm text-destructive"><XCircle className="h-4 w-4" />Payment not completed. Your balance is unchanged.</p>}
               <Button type="submit" variant="gold" size="lg" className="w-full" disabled={busy || !!pending}>{busy && <Loader2 className="animate-spin" />}Send M-Pesa request</Button>
             </form>
