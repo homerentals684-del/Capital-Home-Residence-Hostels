@@ -16,9 +16,8 @@ async function buildCard(room: Room) {
   const W = 1200, H = 1700;
   const c = document.createElement("canvas"); c.width = W; c.height = H;
   const ctx = c.getContext("2d")!;
-  const css = getComputedStyle(document.documentElement);
-  const navy = css.getPropertyValue("--primary").trim() ? `hsl(from ${css.getPropertyValue("--primary").trim()} h s l)` : "";
-  ctx.fillStyle = "#0b1f3a"; if (navy) ctx.fillStyle = css.getPropertyValue("--primary").trim().startsWith("oklch") ? css.getPropertyValue("--primary").trim() : "#0b1f3a";
+  // Canvas output is a printed artefact, so it uses fixed brand print colours.
+  ctx.fillStyle = "#0b1f3a";
   ctx.fillRect(0, 0, W, H);
   const logo = await loadImage(logoUrl);
   const lw = 420, lh = (logo.height / logo.width) * lw;
