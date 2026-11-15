@@ -15,3 +15,8 @@ describe("shared payment routing", () => {
     expect(paymentRequestSchema.safeParse({ action: "finalize", data: { reference: "CHR-123" } }).success).toBe(false);
   });
 });
+describe("new Vercel host", () => {
+  it("forwards capital-home-residence-hostel.vercel.app to the trusted payment host", () => {
+    expect(paymentEndpoint("https://capital-home-residence-hostel.vercel.app")).toBe(`${PAYMENT_SERVICE_ORIGIN}/api/public/payments`);
+  });
+});

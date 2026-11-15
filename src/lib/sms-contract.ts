@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { PAYMENT_ORIGINS, PAYMENT_SERVICE_ORIGIN } from "./payment-contract";
+import { PAYMENT_ORIGINS, serviceBase } from "./payment-contract";
 export type SmsRecipient = {
   userId: string;
   name: string;
@@ -29,5 +29,5 @@ export const smsRequestSchema = z.discriminatedUnion("action", [
 export type SmsSendInput = z.infer<typeof sendSchema>;
 export function smsEndpoint(origin: string) {
   if (!PAYMENT_ORIGINS.has(origin)) throw new Error("SMS is not enabled for this website address.");
-  return `${origin === "https://capital-home-residence-hostels.vercel.app" ? PAYMENT_SERVICE_ORIGIN : origin}/api/public/sms`;
+  return `${serviceBase(origin)}/api/public/sms`;
 }

@@ -4,7 +4,7 @@ import { roomPayRequestSchema } from "./room-pay-contract";
 import { pushForCharge } from "./payments-service.server";
 import { reconcileReference } from "./payhero.server";
 
-/** Public room QR payments: the tenant proves identity by the phone registered to that room. */
+/** Public room QR payments: any M-Pesa number may pay for an active tenant of that room. */
 export async function handleRoomPayRequest(request: Request): Promise<Response> {
   const origin = request.headers.get("origin");
   const headers = new Headers({ "Cache-Control": "no-store", Vary: "Origin" });
@@ -36,24 +36,25 @@ export async function handleRoomPayRequest(request: Request): Promise<Response> 
     const roomInfo = { roomNumber: room.room_number, residence: (room.residences as { name: string } | null)?.name ?? "Capital Home Residence" };
     if (req.action === "info") return reply({ room: roomInfo });
 
-    const phone = normalizeKePhone(req.phone);
-    if (!phone) return reply({ error: "Enter a valid Safaricom number." }, 400);
+    // No phone matching: whoever scans may pay from any number; money is credited to the chosen tenant's charge.
     const { data: tenancies } = await supabaseAdmin.from("tenancies").select("id, user_id").eq("room_id", room.id).eq("status", "active");
     const ids = (tenancies ?? []).map((t) => t.user_id);
-    const { data: profiles } = ids.length ? await supabaseAdmin.from("profiles").select("id, full_name, phone").in("id", ids) : { data: [] };
-    const tenant = (profiles ?? []).find((p) => normalizeKePhone(p.phone ?? "") === phone);
-    if (!tenant) return reply({ error: "This number is not registered to an active tenant of this room." }, 404);
-    const tenancy = tenancies!.find((t) => t.user_id === tenant.id)!;
-    const { data: charge } = await supabaseAdmin.from("rent_charges").select("id, amount_cents, paid_cents, due_date")
-      .eq("tenancy_id", tenancy.id).neq("status", "paid").order("due_date").limit(1).maybeSingle();
+    const { data: profiles } = ids.length ? await supabaseAdmin.from("profiles").select("id, full_name").in("id", ids) : { data: [] };
+    const tenants = await Promise.all((tenancies ?? []).map(async (t) => {
+      const { data: charge } = await supabaseAdmin.from("rent_charges").select("id, amount_cents, paid_cents, due_date")
+        .eq("tenancy_id", t.id).neq("status", "paid").order("due_date").limit(1).maybeSingle();
+      const name = (profiles ?? []).find((p) => p.id === t.user_id)?.full_name ?? "Tenant";
+      return { id: t.user_id, firstName: name.split(" ")[0], charge };
+    }));
     if (req.action === "lookup") {
-      return reply({ firstName: (tenant.full_name ?? "").split(" ")[0], outstandingCents: charge ? charge.amount_cents - charge.paid_cents : 0, dueDate: charge?.due_date ?? null });
+      return reply({ tenants: tenants.map((t) => ({ id: t.id, firstName: t.firstName, outstandingCents: t.charge ? t.charge.amount_cents - t.charge.paid_cents : 0, dueDate: t.charge?.due_date ?? null })) });
     }
-    if (!charge) return reply({ ok: false, error: "You have no outstanding rent." });
-    // Anyone (parent, friend) may pay; money is still recorded on this tenant's room charge.
-    const payer = req.payerPhone ? normalizeKePhone(req.payerPhone) : phone;
-    if (!payer) return reply({ ok: false, error: "Enter a valid M-Pesa number for the payer." });
-    return reply(await pushForCharge({ chargeId: charge.id, userId: tenant.id, phone: payer, mode: req.mode, amountKsh: req.amountKsh, source: "room_qr" }));
+    const target = tenants.find((t) => t.id === req.tenantId);
+    if (!target) return reply({ ok: false, error: "This tenant is not in this room." });
+    if (!target.charge) return reply({ ok: false, error: "No outstanding rent." });
+    const payer = normalizeKePhone(req.phone);
+    if (!payer) return reply({ ok: false, error: "Enter a valid M-Pesa number." });
+    return reply(await pushForCharge({ chargeId: target.charge.id, userId: target.id, phone: payer, mode: req.mode, amountKsh: req.amountKsh, source: "room_qr" }));
   } catch (e) {
     console.error("Room pay failed", e instanceof Error ? e.name : "UnknownError");
     return reply({ error: "Payment service unavailable. Please try again shortly." }, 503);

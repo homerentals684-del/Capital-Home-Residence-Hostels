@@ -17,7 +17,7 @@
 - Rent charges snapshot the room price at approval time; later price edits don't alter existing charges.
 - Profile photos live in the private `avatars` bucket under `<user_id>/`; display via signed URLs.
 - PayHero payments: attempts are separate from verified payments; only finalize_payment() (service role, after re-checking PayHero transaction-status, since callbacks are unsigned) changes balances.
-- Room wall QR codes encode a permanent /r/<roomId> URL; the public /api/public/room-pay service only pushes STK to a phone registered to an active tenant of that room.
+- Room wall QR codes encode a permanent /r/<roomId> URL; the public /api/public/room-pay service only pushes STK to a phone (any number) for an active tenant of that room, credited to the chosen tenant.
 - Both hosts use the authenticated `/api/public/payments` HTTP service on Lovable for start/status/admin reconciliation; Vercel browsers forward only their bearer session to the fixed trusted host because Lovable service-role credentials are not exportable. Preserve explicit CORS origins, token validation, ownership checks and admin authorization.
 - Shared payment operations live in a server-only service reused by HTTP and server-function wrappers so settlement rules cannot diverge between hosts.
 - Tenancy requests are submitted, cancelled and reviewed through authenticated SQL functions; approval and rent charges are atomic and notifications are created by database events to work on both hosts.
