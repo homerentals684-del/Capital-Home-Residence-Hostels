@@ -57,13 +57,13 @@ function RoomPay() {
     const t = setInterval(async () => {
       tries++;
       const r = await call<{ status: string }>({ action: "check", reference: pending }).catch(() => ({ status: "pending" }));
-      if (r.status !== "pending" || tries > 40) {
+      if (r.status !== "pending" || tries > 120) {
         clearInterval(t); setPending(null);
         if (r.status === "success") setResult("success");
         else if (r.status === "pending") setError("Still waiting for M-Pesa. Your balance updates once confirmed.");
         else setResult("failed");
       }
-    }, 5000);
+    }, 1500);
     return () => clearInterval(t);
   }, [pending]);
 

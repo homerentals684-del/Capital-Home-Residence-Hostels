@@ -56,14 +56,14 @@ function PayPage() {
     const t = setInterval(async () => {
       tries++;
       const r = await check({ data: { reference: pending.reference } }).catch(() => ({ status: "pending" }));
-      if (r.status === "success" || r.status === "failed" || r.status === "unmatched" || tries > 40) {
+      if (r.status === "success" || r.status === "failed" || r.status === "unmatched" || tries > 120) {
         clearInterval(t);
         setPending(null);
         setResult(r.status === "success" ? "success" : r.status === "pending" ? null : "failed");
         if (r.status === "pending") setError("Still waiting for M-Pesa confirmation. Check Payment History shortly.");
         qc.invalidateQueries();
       }
-    }, 5000);
+    }, 1500);
     return () => clearInterval(t);
   }, [pending, check, qc]);
 

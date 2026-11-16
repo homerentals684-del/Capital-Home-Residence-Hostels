@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import { Download, Printer } from "lucide-react";
+import { Download, FileDown, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { roomQrUrl } from "@/lib/room-pay-contract";
 import logoUrl from "@/assets/logo.png";
@@ -50,6 +50,16 @@ export function RoomQrCodes({ rooms }: { rooms: Room[] }) {
   const download = (r: Room) => {
     const a = document.createElement("a"); a.href = cards[r.id]!; a.download = `room-${r.room_number}-pay-qr.png`; a.click();
   };
+  const pdf = async (list: Room[], name: string) => {
+    const { jsPDF } = await import("jspdf");
+    const doc = new jsPDF({ unit: "mm", format: "a4" });
+    list.forEach((r, i) => {
+      if (i) doc.addPage();
+      // A4 210x297; card ratio 12:17 → 180x255 centred.
+      doc.addImage(cards[r.id]!, "PNG", 15, 21, 180, 255);
+    });
+    doc.save(name);
+  };
   const printAll = () => {
     const w = window.open("", "_blank"); if (!w) return;
     w.document.write(`<html><head><title>Room QR codes</title><style>body{margin:0}img{width:48%;margin:1%;page-break-inside:avoid}</style></head><body>${rooms.map((r) => `<img src="${cards[r.id]}"/>`).join("")}</body></html>`);
@@ -59,14 +69,15 @@ export function RoomQrCodes({ rooms }: { rooms: Room[] }) {
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm text-muted-foreground">Each code is permanent for its room — tenants scan it, enter their registered phone and get an M-Pesa prompt.</p>
-        <Button variant="gold" onClick={printAll} disabled={Object.keys(cards).length !== rooms.length}><Printer />Print all</Button>
+        <p className="text-sm text-muted-foreground">Each code is permanent for its room — tenants scan it, pick the tenant, enter any M-Pesa number and get an M-Pesa prompt.</p>
+        <div className="flex gap-2"><Button variant="outline" onClick={() => pdf(rooms, "all-room-qr-codes.pdf")} disabled={Object.keys(cards).length !== rooms.length}><FileDown />Download all (PDF)</Button><Button variant="gold" onClick={printAll} disabled={Object.keys(cards).length !== rooms.length}><Printer />Print all</Button></div>
       </div>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {rooms.map((r) => (
           <div key={r.id} className="rounded-xl border bg-card p-3">
             {cards[r.id] ? <img src={cards[r.id]} alt={`QR code for ${r.room_number}`} className="w-full rounded-lg" /> : <div className="aspect-[12/17] animate-pulse rounded-lg bg-muted" />}
-            <Button variant="outline" size="sm" className="mt-3 w-full" onClick={() => download(r)} disabled={!cards[r.id]}><Download />Download {r.room_number}</Button>
+            <Button variant="outline" size="sm" className="mt-3 w-full" onClick={() => download(r)} disabled={!cards[r.id]}><Download />PNG</Button>
+            <Button variant="outline" size="sm" className="mt-2 w-full" onClick={() => pdf([r], `room-${r.room_number}-pay-qr.pdf`)} disabled={!cards[r.id]}><FileDown />PDF</Button>
           </div>
         ))}
       </div>
