@@ -54,7 +54,7 @@ export function RoomQrCodes({ rooms }: { rooms: Room[] }) {
     const { jsPDF } = await import("jspdf");
     const doc = new jsPDF({ unit: "mm", format: "a4" });
     // Single room: one full A4 card. Bulk: 4 cards per A4 page (2x2) to save paper.
-    if (list.length === 1) doc.addImage(cards[list[0].id]!, "PNG", 15, 21, 180, 255);
+    if (list.length === 1) doc.addImage(cards[list[0]!.id]!, "PNG", 15, 21, 180, 255);
     else list.forEach((r, i) => {
       if (i && i % 4 === 0) doc.addPage();
       const slot = i % 4, w = 90, h = 127.5; // 12:17 ratio
