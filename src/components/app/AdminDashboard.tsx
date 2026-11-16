@@ -247,6 +247,8 @@ function Rooms() {
   });
   const [form, setForm] = useState({ residence_id: "", room_number: "", room_type: "Single", price: "", max: "1" });
   const [newRes, setNewRes] = useState("");
+  const [propFilter, setPropFilter] = useState("");
+  const shownRooms = rooms?.filter((r) => !propFilter || r.residence_id === propFilter);
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-rooms"] }); qc.invalidateQueries({ queryKey: ["admin-residences"] }); qc.invalidateQueries({ queryKey: ["admin-counts"] }); };
 
   async function addRoom() {
@@ -287,13 +289,20 @@ function Rooms() {
         <Input className="md:col-span-2" placeholder="New residence / block name" value={newRes} onChange={(e) => setNewRes(e.target.value)} />
         <Button variant="outline" onClick={addResidence}><Plus />Add residence</Button>
       </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <select aria-label="Filter by property" className={selectCls + " max-w-xs"} value={propFilter} onChange={(e) => setPropFilter(e.target.value)}>
+          <option value="">All properties</option>
+          {residences?.map((r) => <option key={r.id} value={r.id}>{r.name}</option>)}
+        </select>
+        <span className="text-sm text-muted-foreground">Showing {shownRooms?.length ?? 0} of {rooms?.length ?? 0} rooms</span>
+      </div>
       <div className="overflow-x-auto rounded-xl border bg-card">
         <table className="w-full text-sm">
           <thead className="bg-muted text-left text-xs uppercase text-muted-foreground">
             <tr><th className="p-3">Room</th><th>Residence</th><th>Type</th><th>Price (KSh)</th><th>Occupancy</th><th>Status</th><th>Active</th></tr>
           </thead>
           <tbody>
-            {rooms?.map((r) => (
+            {shownRooms?.map((r) => (
               <tr key={r.id} className="border-t">
                 <td className="p-3 font-medium">{r.room_number}</td>
                 <td>{r.residences?.name}</td>
