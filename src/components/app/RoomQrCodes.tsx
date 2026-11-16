@@ -53,10 +53,12 @@ export function RoomQrCodes({ rooms }: { rooms: Room[] }) {
   const pdf = async (list: Room[], name: string) => {
     const { jsPDF } = await import("jspdf");
     const doc = new jsPDF({ unit: "mm", format: "a4" });
-    list.forEach((r, i) => {
-      if (i) doc.addPage();
-      // A4 210x297; card ratio 12:17 → 180x255 centred.
-      doc.addImage(cards[r.id]!, "PNG", 15, 21, 180, 255);
+    // Single room: one full A4 card. Bulk: 4 cards per A4 page (2x2) to save paper.
+    if (list.length === 1) doc.addImage(cards[list[0].id]!, "PNG", 15, 21, 180, 255);
+    else list.forEach((r, i) => {
+      if (i && i % 4 === 0) doc.addPage();
+      const slot = i % 4, w = 90, h = 127.5; // 12:17 ratio
+      doc.addImage(cards[r.id]!, "PNG", 10 + (slot % 2) * (w + 10), 16 + Math.floor(slot / 2) * (h + 10), w, h);
     });
     doc.save(name);
   };
