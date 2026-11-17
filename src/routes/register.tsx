@@ -11,6 +11,7 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { supabase } from "@/integrations/supabase/client";
 import { ksh, normalizeKePhone } from "@/lib/format";
 import { selectCls } from "@/lib/ui";
+import { usePropertyImages } from "@/lib/property-images";
 
 export const Route = createFileRoute("/register")({
   head: () => ({
@@ -61,7 +62,7 @@ function RegisterPage() {
     queryKey: ["reg-options"],
     queryFn: async () => {
       const [res, rooms, sems] = await Promise.all([
-        supabase.from("residences").select("id,name").eq("active", true).order("name"),
+        supabase.from("residences").select("id,name,location,image_path").eq("active", true).order("name"),
         supabase.from("rooms").select("id,residence_id,room_number,semester_price_cents,max_occupancy,current_occupants,status").eq("active", true).order("room_number"),
         supabase.from("semesters").select("id,academic_year,name,status").neq("status", "closed").order("start_date"),
       ]);
@@ -77,6 +78,8 @@ function RegisterPage() {
   const [busy, setBusy] = useState(false);
   const [done, setDone] = useState<string | null>(null);
 
+  const imgUrls = usePropertyImages(options?.residences);
+  const residence = options?.residences.find((r) => r.id === residenceId);
   const rooms = useMemo(() => (options?.rooms ?? []).filter((r) => r.residence_id === residenceId && r.status !== "maintenance"), [options, residenceId]);
   const room = rooms.find((r) => r.id === roomId);
   const spaceLeft = room ? room.max_occupancy - room.current_occupants : 0;
@@ -179,6 +182,12 @@ function RegisterPage() {
               </Field>
               <Field label="Occupants (incl. you)"><Input name="occupants" type="number" min={1} step={1} value={occupants} onChange={(e) => setOccupants(Number(e.target.value))} /></Field>
             </Section>
+            {residence && (
+              <div className="flex items-center gap-4 overflow-hidden rounded-xl border bg-secondary/40">
+                {imgUrls[residence.id] ? <img src={imgUrls[residence.id]} alt={residence.name} className="h-28 w-40 shrink-0 object-cover" /> : <div className="flex h-28 w-40 shrink-0 items-center justify-center bg-secondary text-xs text-muted-foreground">No photo</div>}
+                <div className="py-2 pr-4"><p className="font-semibold">{residence.name}</p>{residence.location && <p className="text-sm text-muted-foreground">{residence.location}</p>}</div>
+              </div>
+            )}
             {room && (
               <p className={`flex gap-2 rounded-lg p-3 text-xs ${overCapacity ? "bg-destructive/10 text-destructive" : "bg-secondary text-secondary-foreground"}`}>
                 <Info className="h-4 w-4 shrink-0" />

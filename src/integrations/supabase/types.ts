@@ -368,6 +368,7 @@ export type Database = {
           created_at: string
           default_price_cents: number
           id: string
+          image_path: string | null
           location: string
           name: string
           updated_at: string
@@ -377,6 +378,7 @@ export type Database = {
           created_at?: string
           default_price_cents?: number
           id?: string
+          image_path?: string | null
           location?: string
           name: string
           updated_at?: string
@@ -386,6 +388,7 @@ export type Database = {
           created_at?: string
           default_price_cents?: number
           id?: string
+          image_path?: string | null
           location?: string
           name?: string
           updated_at?: string
@@ -699,6 +702,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      add_rooms_to_property: {
+        Args: {
+          _max_occupancy: number
+          _price_cents: number
+          _residence_id: string
+          _room_numbers: string[]
+        }
+        Returns: number
+      }
       approve_registration: {
         Args: { _note?: string; _reg_id: string; _room_id?: string }
         Returns: string
@@ -717,6 +729,9 @@ export type Database = {
         }
         Returns: string
       }
+      delete_property: { Args: { _residence_id: string }; Returns: string }
+      delete_room: { Args: { _room_id: string }; Returns: string }
+      delete_tenant: { Args: { _user_id: string }; Returns: string }
       end_tenancy: {
         Args: { _note?: string; _tenancy_id: string }
         Returns: undefined
@@ -745,6 +760,10 @@ export type Database = {
       review_tenancy_request: {
         Args: { _approve: boolean; _note?: string; _request_id: string }
         Returns: undefined
+      }
+      start_semester: {
+        Args: { _carry_over?: boolean; _semester_id: string }
+        Returns: number
       }
       submit_tenancy_request: {
         Args: {
