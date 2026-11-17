@@ -1,3 +1,4 @@
+import { expandRoomRange } from "@/lib/room-range";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -246,7 +247,10 @@ function Rooms() {
     queryFn: async () => (await supabase.from("residences").select("*").order("name")).data ?? [],
   });
   const [form, setForm] = useState({ residence_id: "", room_number: "", room_type: "Single", price: "", max: "1" });
-  const [newRes, setNewRes] = useState("");
+  const [prop, setProp] = useState({ name: "", location: "", start: "", end: "", rent: "", max: "1" });
+  const [saving, setSaving] = useState(false);
+  let preview: string[] = []; let previewErr = "";
+  if (prop.start.trim() && prop.end.trim()) { try { preview = expandRoomRange(prop.start, prop.end); } catch (e) { previewErr = (e as Error).message; } }
   const [propFilter, setPropFilter] = useState("");
   const shownRooms = rooms?.filter((r) => !propFilter || r.residence_id === propFilter);
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-rooms"] }); qc.invalidateQueries({ queryKey: ["admin-residences"] }); qc.invalidateQueries({ queryKey: ["admin-counts"] }); };
@@ -261,11 +265,18 @@ function Rooms() {
     setForm({ ...form, room_number: "" });
     refresh();
   }
-  async function addResidence() {
-    if (!newRes.trim()) return;
-    const { error } = await supabase.from("residences").insert({ name: newRes.trim() });
-    if (error) { toast.error(error.message); return; }
-    setNewRes("");
+  async function addProperty() {
+    const rent = Math.round(Number(prop.rent) * 100);
+    const max = parseInt(prop.max);
+    if (!prop.name.trim() || !prop.start.trim() || !prop.end.trim() || !prop.rent || !(rent >= 0) || !(max >= 1)) { toast.error("Fill in all property fields"); return; }
+    if (previewErr) { toast.error(previewErr); return; }
+    if (residences?.some((r) => r.name.trim().toLowerCase() === prop.name.trim().toLowerCase())) { toast.error("A property with this name already exists"); return; }
+    setSaving(true);
+    const { error } = await supabase.rpc("create_property_with_rooms", { _name: prop.name, _location: prop.location, _room_numbers: preview, _price_cents: rent, _max_occupancy: max });
+    setSaving(false);
+    if (error) { toast.error(error.message.includes("duplicate") ? "Duplicate room numbers in this property" : error.message); return; }
+    toast.success(`Property saved with ${preview.length} rooms`);
+    setProp({ name: "", location: "", start: "", end: "", rent: "", max: "1" });
     refresh();
   }
   async function update(id: string, patch: Record<string, unknown>) {
@@ -286,8 +297,21 @@ function Rooms() {
         <Input placeholder="Price KSh" type="number" value={form.price} onChange={(e) => setForm({ ...form, price: e.target.value })} />
         <Input placeholder="Max occupancy" type="number" min={1} value={form.max} onChange={(e) => setForm({ ...form, max: e.target.value })} />
         <Button onClick={addRoom}><Plus />Add room</Button>
-        <Input className="md:col-span-2" placeholder="New residence / block name" value={newRes} onChange={(e) => setNewRes(e.target.value)} />
-        <Button variant="outline" onClick={addResidence}><Plus />Add residence</Button>
+      </div>
+      <div className="space-y-4 rounded-xl border bg-card p-5">
+        <h3 className="font-semibold">Add property & generate rooms</h3>
+        <div className="grid gap-3 md:grid-cols-3">
+          <Input placeholder="Property name" value={prop.name} onChange={(e) => setProp({ ...prop, name: e.target.value })} />
+          <Input placeholder="Location" value={prop.location} onChange={(e) => setProp({ ...prop, location: e.target.value })} />
+          <Input placeholder="Semester rent (KES)" type="number" min={0} value={prop.rent} onChange={(e) => setProp({ ...prop, rent: e.target.value })} />
+          <Input placeholder="Starting room no. e.g. 1 or A-01" value={prop.start} onChange={(e) => setProp({ ...prop, start: e.target.value })} />
+          <Input placeholder="Ending room no. e.g. 20 or A-20" value={prop.end} onChange={(e) => setProp({ ...prop, end: e.target.value })} />
+          <Input placeholder="Availability (tenants per room)" type="number" min={1} value={prop.max} onChange={(e) => setProp({ ...prop, max: e.target.value })} />
+        </div>
+        {previewErr ? <p className="text-sm text-destructive">{previewErr}</p> : preview.length > 0 && (
+          <p className="text-sm text-muted-foreground">{preview.length} rooms will be created as Vacant: {preview.slice(0, 8).join(", ")}{preview.length > 8 ? ` … ${preview[preview.length - 1]}` : ""}</p>
+        )}
+        <Button onClick={addProperty} disabled={saving}><Plus />{saving ? "Saving…" : "Save property & rooms"}</Button>
       </div>
       <div className="flex flex-wrap items-center gap-3">
         <select aria-label="Filter by property" className={selectCls + " max-w-xs"} value={propFilter} onChange={(e) => setPropFilter(e.target.value)}>

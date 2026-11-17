@@ -43,6 +43,13 @@
       "when": 1794667107567,
       "tag": "0005_payhero_provider_reference",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1794895989272,
+      "tag": "0006_property_room_generator",
+      "breakpoints": true
     }
   ]
 }

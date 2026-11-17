@@ -368,6 +368,7 @@ export type Database = {
           created_at: string
           default_price_cents: number
           id: string
+          location: string
           name: string
           updated_at: string
         }
@@ -376,6 +377,7 @@ export type Database = {
           created_at?: string
           default_price_cents?: number
           id?: string
+          location?: string
           name: string
           updated_at?: string
         }
@@ -384,6 +386,7 @@ export type Database = {
           created_at?: string
           default_price_cents?: number
           id?: string
+          location?: string
           name?: string
           updated_at?: string
         }
@@ -703,6 +706,16 @@ export type Database = {
       cancel_tenancy_request: {
         Args: { _request_id: string }
         Returns: undefined
+      }
+      create_property_with_rooms: {
+        Args: {
+          _location: string
+          _max_occupancy: number
+          _name: string
+          _price_cents: number
+          _room_numbers: string[]
+        }
+        Returns: string
       }
       end_tenancy: {
         Args: { _note?: string; _tenancy_id: string }
