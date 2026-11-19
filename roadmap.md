@@ -16,3 +16,4 @@
 - [x] Cross-host SMS implementation and security tests; signed-in admin SMS flow verified in preview
 - [ ] Publish Lovable SMS update and redeploy GitHub-to-Vercel (waiting on publishing approval)
 - [ ] Confirm successful real SMS to Elvis Okinda, Old Room-01 (live attempt rejected by provider: UserInBlacklist; recipient must opt in before an authorized retry)
+- [x] Room range merge into existing property, delete property/room/tenant, labelled semester form + semester rollover, property photos on registration, total rent billed/collected
