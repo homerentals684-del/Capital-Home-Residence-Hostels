@@ -1,4 +1,4 @@
-import { expandRoomRange } from "@/lib/room-range";
+import { expandRoomRange, roomKey } from "@/lib/room-range";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -269,9 +269,9 @@ function Rooms() {
   const [saving, setSaving] = useState(false);
   let preview: string[] = []; let previewErr = "";
   if (prop.start.trim() && prop.end.trim()) { try { preview = expandRoomRange(prop.start, prop.end); } catch (e) { previewErr = (e as Error).message; } }
-  const existing = new Set((rooms ?? []).filter((r) => r.residence_id === prop.target && r.active).map((r) => r.room_number.trim().toLowerCase()));
-  const skipped = prop.target === "new" ? [] : preview.filter((n) => existing.has(n.toLowerCase()));
-  const toAdd = prop.target === "new" ? preview : preview.filter((n) => !existing.has(n.toLowerCase()));
+  const existing = new Set((rooms ?? []).filter((r) => r.residence_id === prop.target && r.active).map((r) => roomKey(r.room_number)));
+  const skipped = prop.target === "new" ? [] : preview.filter((n) => existing.has(roomKey(n)));
+  const toAdd = prop.target === "new" ? preview : preview.filter((n) => !existing.has(roomKey(n)));
   const [propFilter, setPropFilter] = useState("");
   const shownRooms = rooms?.filter((r) => !propFilter || r.residence_id === propFilter);
   const refresh = () => { qc.invalidateQueries({ queryKey: ["admin-rooms"] }); qc.invalidateQueries({ queryKey: ["admin-residences"] }); qc.invalidateQueries({ queryKey: ["admin-counts"] }); };
