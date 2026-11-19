@@ -57,6 +57,13 @@
       "when": 1794897359642,
       "tag": "0007_property_management_semester_rollover",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1795063048617,
+      "tag": "0008_restrict_property_image_reads",
+      "breakpoints": true
     }
   ]
 }
