@@ -1,0 +1,1 @@
+DROP POLICY IF EXISTS "property images read current photos" ON storage.objects;

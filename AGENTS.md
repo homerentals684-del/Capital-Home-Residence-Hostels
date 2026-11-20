@@ -25,3 +25,4 @@
 - SMS goes through Africa's Talking production endpoint only (src/lib/africastalking.server.ts); credentials stay in server secrets (AFRICASTALKING_API_KEY, AFRICASTALKING_USERNAME), sending is admin-only via has_role(), every send is logged in public.sms_messages, and identical messages to the same number within 24h are skipped.
 
 - Both hosts use authenticated `/api/public/sms` on the trusted Lovable host; shared server-only SMS operations enforce admin access, real-test-before-bulk and audit logging so external deployments never need SMS secrets.
+- Property photos are delivered as short-lived links only for active residences; browsers cannot read the private bucket directly, and Vercel forwards photo requests to the trusted Lovable host.

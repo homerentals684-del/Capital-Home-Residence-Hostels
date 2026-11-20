@@ -23,6 +23,7 @@ import { Route as RRoomIdRouteImport } from './routes/r/$roomId'
 import { Route as AuthenticatedReceiptIdRouteImport } from './routes/_authenticated/receipt.$id'
 import { Route as ApiPublicPayheroWebhookRouteImport } from './routes/api/public/payhero-webhook'
 import { Route as ApiPublicPaymentsRouteImport } from './routes/api/public/payments'
+import { Route as ApiPublicPropertyImagesRouteImport } from './routes/api/public/property-images'
 import { Route as ApiPublicRoomPayRouteImport } from './routes/api/public/room-pay'
 import { Route as ApiPublicSmsRouteImport } from './routes/api/public/sms'
 
@@ -96,6 +97,11 @@ const ApiPublicPaymentsRoute = ApiPublicPaymentsRouteImport.update({
   path: '/api/public/payments',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicPropertyImagesRoute = ApiPublicPropertyImagesRouteImport.update({
+  id: '/api/public/property-images',
+  path: '/api/public/property-images',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicRoomPayRoute = ApiPublicRoomPayRouteImport.update({
   id: '/api/public/room-pay',
   path: '/api/public/room-pay',
@@ -121,6 +127,7 @@ export interface FileRoutesByFullPath {
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payhero-webhook': typeof ApiPublicPayheroWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
+  '/api/public/property-images': typeof ApiPublicPropertyImagesRoute
   '/api/public/room-pay': typeof ApiPublicRoomPayRoute
   '/api/public/sms': typeof ApiPublicSmsRoute
 }
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payhero-webhook': typeof ApiPublicPayheroWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
+  '/api/public/property-images': typeof ApiPublicPropertyImagesRoute
   '/api/public/room-pay': typeof ApiPublicRoomPayRoute
   '/api/public/sms': typeof ApiPublicSmsRoute
 }
@@ -157,6 +165,7 @@ export interface FileRoutesById {
   '/_authenticated/receipt/$id': typeof AuthenticatedReceiptIdRoute
   '/api/public/payhero-webhook': typeof ApiPublicPayheroWebhookRoute
   '/api/public/payments': typeof ApiPublicPaymentsRoute
+  '/api/public/property-images': typeof ApiPublicPropertyImagesRoute
   '/api/public/room-pay': typeof ApiPublicRoomPayRoute
   '/api/public/sms': typeof ApiPublicSmsRoute
 }
@@ -176,6 +185,7 @@ export interface FileRouteTypes {
     | '/receipt/$id'
     | '/api/public/payhero-webhook'
     | '/api/public/payments'
+    | '/api/public/property-images'
     | '/api/public/room-pay'
     | '/api/public/sms'
   fileRoutesByTo: FileRoutesByTo
@@ -193,6 +203,7 @@ export interface FileRouteTypes {
     | '/receipt/$id'
     | '/api/public/payhero-webhook'
     | '/api/public/payments'
+    | '/api/public/property-images'
     | '/api/public/room-pay'
     | '/api/public/sms'
   id:
@@ -211,6 +222,7 @@ export interface FileRouteTypes {
     | '/_authenticated/receipt/$id'
     | '/api/public/payhero-webhook'
     | '/api/public/payments'
+    | '/api/public/property-images'
     | '/api/public/room-pay'
     | '/api/public/sms'
   fileRoutesById: FileRoutesById
@@ -223,6 +235,7 @@ export interface RootRouteChildren {
   RRoomIdRoute: typeof RRoomIdRoute
   ApiPublicPayheroWebhookRoute: typeof ApiPublicPayheroWebhookRoute
   ApiPublicPaymentsRoute: typeof ApiPublicPaymentsRoute
+  ApiPublicPropertyImagesRoute: typeof ApiPublicPropertyImagesRoute
   ApiPublicRoomPayRoute: typeof ApiPublicRoomPayRoute
   ApiPublicSmsRoute: typeof ApiPublicSmsRoute
 }
@@ -327,6 +340,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicPaymentsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/property-images': {
+      id: '/api/public/property-images'
+      path: '/api/public/property-images'
+      fullPath: '/api/public/property-images'
+      preLoaderRoute: typeof ApiPublicPropertyImagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/room-pay': {
       id: '/api/public/room-pay'
       path: '/api/public/room-pay'
@@ -375,6 +395,7 @@ const rootRouteChildren: RootRouteChildren = {
   RRoomIdRoute: RRoomIdRoute,
   ApiPublicPayheroWebhookRoute: ApiPublicPayheroWebhookRoute,
   ApiPublicPaymentsRoute: ApiPublicPaymentsRoute,
+  ApiPublicPropertyImagesRoute: ApiPublicPropertyImagesRoute,
   ApiPublicRoomPayRoute: ApiPublicRoomPayRoute,
   ApiPublicSmsRoute: ApiPublicSmsRoute,
 }
